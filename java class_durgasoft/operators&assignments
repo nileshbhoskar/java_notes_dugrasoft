@@ -1,0 +1,1034 @@
+Operators
+_____________
+1. increment and decrement operators
+2. arithmatic operators
+3. string concadination operator
+4. relational operators 
+5. equality operators
+6. instance of operators
+7. bitwise operators
+8. short circuit operator
+9. type cast operators
+10. assignment operator
+11. conditional operators
+12. new operator
+13. [] operator
+14. operator precedence
+15. Evealuation order of operator
+16. new vs newInstance()
+17. instanceof of isInstance()
+18. ClassNotFoundException vs NoClassDefinationFoundError.
+
+
+Expression			Initial value of x		value of y		final value of x
+________________________________________________________________________________________________________________
+y = ++x				10				11			11
+
+y = x++				10				10			11
+
+y = --x				10				9			9
+
+y = x--				10				10			9
+
+
+1. we can apply increment and decrement operators only for variables but not for constant values if we are trying to apply for constant values then we will get compile time error.
+
+e.g
+class Test{
+	public static void main(String[] args){
+		int x = 10;
+		int y = ++x;
+		System.out.println(y);
+	}
+}
+output:
+11
+
+class Test{
+	public static void main(String[] args){
+		int x = 10;
+		int y = ++10;
+		System.out.println("y");
+	}
+}
+output:
+CE: unexpected type
+required : variable
+found : value
+
+2. nesting of increment and decrement operators not allowed.
+
+e.g 
+
+class Test{
+	public static void main(String[] main){
+		int x = 10;
+		int y = ++(++x);
+		System.out.println("y");
+	}
+}
+output:
+CE: unexpected type
+required : variable
+found : value
+
+3. for final variables we can't apply increment and decrement operators
+
+class Test{
+	public static void main(String[] main){
+		final int x = 10;
+		++x;
+		System.out.println("x");
+	}
+}
+
+output:
+CE: cannot assign a value to final variable x.
+
+4. we can apply increment and decrement operators for every premitive type except boolean.
+
+int x = 10;		char ch = 'a';			double d = 10.5;		boolean b = true;
+
+    x++;		a++;				d++;				b++;
+sopln(x);		sopln(a);			sopln(d);			sopln(b);
+
+output : 11		output:b			output:11.5			CE: operator ++ cannot assign to boolean value
+
+
+Difference between b++ and b = b + 1 
+
+if we apply any arithmatic operator between two variables 'a' and 'b' the result type is always max(int, type of a, type of b)
+
+e.g 1
+
+byte a = 10;
+byte b = 20;
+
+byte c = a + b;
+
+sopln(c);
+
+CE: possible loss of precision found int required byte.
+
+byte c = (byte) a + b;
+
+sopln(c);
+
+output:
+30.
+
+e.g 2
+
+byte b = 10;
+b = b + 1;
+sopln(b);
+
+output:
+CE: PLP found int required byte.
+
+byte b = 10;
+b = (byte) b + 1;
+sopln(b)
+output:
+11
+
+5. but in the case of increment and decrement operators internal typecasting will be performed automatically.
+
+
+b++ means b = (type of b) (b+1)
+
+e.g type b = 10;
+
+b++;
+sopln(b)
+
+output : 
+11
+
+___________________________________________
+Arithmatic operators ('+','-','*','/','%')
+___________________________________________
+
+if we apply any arithmatic operator between two variables 'a' and 'b' the result type is always max(int, type of a, type of b)
+
+so from this discussion.
+
+byte + byte = int
+
+byte + short = int
+
+short + short = int
+
+byte + long = long
+
+long + double = double
+
+float + float = float
+
+float + long = float
+
+char + char = int
+
+char + double = double 
+
+e.g
+
+sopln('a'+'b');
+195
+
+sopln('a' + 0.89)
+
+97.98
+
+*************
+Infinity    *
+*************
+
+in integral arithmatic (byte, short, int ,long) there is no way to represent infinity hence if infinity is result we will get arithmatic exception in integral arithmatic 
+
+e.g 
+sopln(10/0);
+
+output:
+RE: ArithmaticException: / by zero
+
+but in floating point arithmatic (float and double) there is a way to represent infinity. for this Float and Double classes contains the following two constants.
+
+POSITIVE_INFINITY(INFINITY)
+NEGITIVE_INFINITY(-INFINITY)
+
+hence even though result is infinity we won't get any arithmatic exception in floating point arithmatic 
+
+e.g sopln(10/0.0)
+output
+INFINITY
+
+SOPLN(-10/0.0)
+
+-INFINITY
+******************
+NaN(Not a Number)*
+******************
+
+in integral arithmatic (byte, short, int, long) there is no way to represent undefined result hence if the result is undefined we will get runtime exception saying ArithmaticException.
+
+e.g sopln(0/0); RE:ArithmaticException : / by zero
+
+but in floating point arithmatic there is a way to represent undefined results for this Float and Double classes contains NaN constants.
+
+hence if the result is undefined we won't get any arithmatic exception in floating point arithmatic.
+
+e.g 
+sopln(0.0/0); NaN
+sopln(-0.0/0); NaN
+
+Note : for any x value including NaN the following expressions returns false.
+
+x < NaN-->false
+x <= NaN-->false
+x > NaN-->false
+x >= NaN-->false
+x == NaN-->false
+
+for any x value including NaN the following expression returns true.
+
+x != NaN-->true
+
+sopln(10 < Float.NaN);------->false
+sopln(10 <= Float.NaN);------->false
+sopln(10 > Float.NaN);------->false
+sopln(10 >= Float.NaN);------->false
+sopln(10 == Float.NaN);------->false
+sopln(Float.NaN == Float.NaN);------->false
+sopln(10 != Float.NaN);------->true
+sopln(Float.NaN != Float.NaN);------->true
+
+__________________________
+Arithmatic Exception
+__________________________
+
+1. it is runTimeException but not compile time error
+2. it is possible only in integral arithmatic but not in floating point arithmatic
+3. the only operators which cause arithmatic exception are '/' or '%'.
+
+______________________________
+String Concadination operator |
+______________________________|
+
+The only overloaded operator in java is '+' operator. sometimes it acts as arithmatic addition operator and sometimes it acts as stringConcadination operator. 
+
+if atlist one argument is string type then '+' operator acts as concadination operator and if both arguments are number type then '+' operator acts as arithmatic addition operator.
+
+e.g 1. 
+
+String a = "test";
+
+int b = 10;
+int c = 20;
+int d = 30;
+
+sop(a+b+c+d);	test102030
+sop(b+c+d+a);	60test
+sop(b+c+a+d);	30test30
+sop(b+a+c+d);	10test50
+
+a + b + c + d
+
+"test10" + c + d
+"test1020" + d
+"test102030"
+
+e.g 2. 
+consider the following declarations
+String a = "test";
+
+int b = 10;
+int c = 20;
+int d = 30;
+
+which of the following expressions are valid.
+
+a = b + c + d; invalid  CE:incompatable type found : int required : java.lang.String
+a = a + b + c; valid
+b = a + c + d; invalid CE: incompatable type found : java.lang.String required : int
+b = b + c + d; valid
+we can apply relational operators for every primitive type except boolean.
+
+sopln(10 < 20);		true
+sopln('a' < 10);	false
+sopln('a' < 97.6);	true
+sopln('a' < 'A');	true
+sopln(true < false);	CE: Operator > cannot be applied to boolean, boolean.
+
+we can't apply relational operators for object types.
+
+sopln("abc123" > "abc"); CE : operator > can't be applied to java.lang.String.
+
+nesting of relational operators is not allowed otherwise we will get compiletime error.
+
+e.g. sopln(10 < 20 < 30);
+	true < 30
+
+operator < cannot be applied to boolean, int 
+
+_____________________________
+Equality operators '==', '!='|
+_____________________________|
+
+we can apply equality operators for every primitive type including boolean type also.
+
+e.g sopln(10 == 20); false
+sopln('a' == 'b'); false
+sopln('a' == 97.0); true
+
+we can apply equality operators for object types also. For object references r1, r2
+r1 == r2 returns true if and only if both references pointing to the same object(reference comparisation or address comparisation).
+
+
+
+		___________
+		|	  |
+	r1----->|   object|
+		|	  |
+	r2----->|_________|
+
+e.g 1 .
+Thread t1 = new Thread();
+Thread t2 = new Thread();
+Thread t3 = t1;
+sopln(t1 == t2); //false
+sopln(t1 == t3); //true
+
+if we apply equality('==') operator for object types then compulsary there should be some relation between argument types (either child to parent or parent to child or same type) otherwise we will get compiletime error saying incomparable types.
+
+e.g.
+
+Thread t = new Thread();
+
+Object o = new Object();
+
+String s = new String("Test");
+
+sopln(t==o);//false
+sopln(o==s); //false
+sopln(s==t);// CE: incomparable types: java.lang.String and java.lang.Thread
+
+Difference between == operator and .equals() method.
+
+in general we can use '==' operator for reference comparisation (address comparisation) and .equals() method for content comparisation.
+
+String s1 = new String("Test");
+String s2 = new String("Test");
+
+sopln(s1 == s2);	//false
+sopln(s1.equals(s2)); 	// true
+
+Note : for any object reference r
+
+r == null; is always false
+
+but null == null; is always true.
+
+String s1 = "test";
+
+sopln(s1 == null); // false
+
+String s = null;
+sopln(s == null); // true
+sopln(null == null); // true
+
+_____________________________________
+instanceof operator
+_____________________________________
+
+we can use 'instanceof' operator to check that given object is perticular type or not.
+
+Object o = list.get(0);
+
+if(o instanceof Student){
+	Student s = (Student) o;
+	//perform student specific functionality
+} else if(o instanceof Customer){
+	Customer c = (Customer) o;
+	//perform customer specific functionality
+}
+
+
+Syntax
+_______
+
+			r instanceof X
+			|	     |
+			|	     |
+			|	     |
+			\/	     \/
+		object reference   class or interface name
+
+e.g
+
+Thread t = new Thread();
+
+sopln(t instanceof Thread);	// true
+sopln(t instanceof Object);	// true
+sopln(t instanceof Runnable);	// true
+
+sopln(t instanceof String);	// CE: inconvertable type found java.lang.String required java.lang.Thread
+
+To use 'instanceof' operator compulsary there should be some relation between argument types (either child to parent or parent to child or same type) otherwise we will get compiletime error saying inconvertable types.
+
+Note : for any class or interface X 
+null instanceof X always false
+
+sopln(null instanceof Thread); // false 
+sopln(null instanceof Runnable); // false
+
+
+_____________________________
+Bitwise operators '&','|','^'|
+_____________________________|
+
+& --> AND ==> returns true if both arguments are true
+| --> OR ==> returns true if atlist one argument is true
+^ --> X-OR ==> returns true if and only if both arguments are different.
+
+e.g sopln(true & false); // false
+e.g sopln(true | false); // true
+e.g sopln(true ^ false); // true
+
+
+we can apply these operators for integral types also. 
+
+e.g sopln(4 & 5); // 4		100
+				101
+				____
+				100
+
+e.g sopln(4 | 5); // 5		100
+				101
+				____
+				101
+
+e.g sopln(4 ^ 5); // 1		100
+				101
+			       _____
+				001
+
+________________________________
+Bitwise complement operator (~)	|
+________________________________|
+
+we can apply this('~') operator only for integral types but not for boolean type. If we are trying to apply for boolean type then we will get compile time error 
+
+System.out.println(~true);	// operator ~ cannot be applied to boolean
+System.out.println(~4);		// -5 
+
+4 = 0		0 0 0 0 ... 0 1 0 0
+    |			      _____
+    |				| 1
+    |				|2	complement	
+    |				|
+Signed bit			|
+				
+
+	~4 = 1 1 1 1  . . . . 1 0 1 1
+	     |		0 0 0 0 ... 0 1 0 0
+	     |				  1
+	     |		___________________
+	    -ve		0 0 0 0 ... 0 1 0 1-------->5
+
+ 
+Note : The most significant bit acts as signed bit 0 means +ive number, 1 means -ive number
+																   1
+positive numbers will be represented directly in the memory where as -ive numbers will be represented indirectly in the memory in 2 (2s complement) form
+
+___________________________________________
+boolean complement operator (!)
+___________________________________________
+
+we can apply this operator only for boolean types but not for integral types.
+
+sopln(!4); // operator cannot be applied to int
+sopln(!false); // true
+
+&
+|	these operator applicable for both boolean and integral types
+^
+
+~	this operator applicable for only integral types but not for boolean types
+
+!	this operator applicable only for boolean but not for integeral types
+
+___________________________________
+Short-Circuit operators (||, &&)
+___________________________________
+
+these are exactly same as bitwise operators (&, |) except the following differences
+
+________________________________________________________________________________________
+	&,|						&&,||
+________________________________________________________________________________________
+
+1. both arguments should be evaluated		1. second argument evaluation is optional
+always
+
+2. relatively performance is low		2. relatively performance is high.
+
+3. applicable for both boolean and integer 	3. applicable only for boolean but not for 
+types							integer types.
+
+___________________________________________________________________________________________
+
+Note : 1. x && Y
+
+y will be evaluated if and only if x is true i.e if x is false then y won't be evaluated.
+
+x || y y will be evaluated if and only if x is false. i.e if x is true then y won't be evaluated.
+
+e.g
+
+int x = 10;
+int y = 15;
+
+if(++x < 10 && ++y >15){
+	x++;
+} else {
+	y++;
+}
+
+sopln(x + "..." + y);
+
+	x		Y
+______________________________
+&	11		17
+______________________________
+&&	11		16
+______________________________
+|	12		16
+______________________________
+||	12		16
+______________________________
+
+int x = 10;
+if(++x < 10 && (x/0 > 10)){
+	sopln("Hello");
+} else {
+	sopln("Hi");
+}
+
+output:
+Hi
+
+if we replace && with & then we will get runtime exception saying ArithmaticException: division by 0
+
+_____________________
+Typecast operators
+_____________________
+
+There are two types of typecasting 
+1. implicit typecasting
+2. explicit typecasting 
+
+1. implicit typecasting
+
+
+int x = 'a';
+
+sopln(x);// 97	(compiler converts char to int automatically by implicit typecasting)
+
+double d = 10;
+
+sopln(d);//10.0 (compiler converts int to double automatically by implicit typecasting)
+
+1. compiler is responsible to perform implicit typecasting.
+2. whenever we are assigning smaller datatype value to bigger datatype variable implicit typecasting will be performed.
+3. it is also known as widening or upcasting 
+4. there is no loss of information in this typecasting.
+
+following are various possible conversions where implicit typecasting will be performed.
+
+byte------->short----->\
+			\
+			 \
+			  \--->int ------->long------->float----->double
+    	                  /
+		    	 /
+		   	/
+char------------------>/
+
+e.g 1.
+
+int x = 10;
+sopln(x); // 97
+
+e.g 2.
+
+double d = 10;
+sopln(d); // 10.0
+
+
+Explicit typecasting
+_____________________
+
+1. Programmer is responsible to perform explicit typecasting.
+2. whenever we are assigning bigger datatype value to smaller datatype variable then explicit typecasting is required.
+3. it is also known as narrowing or downcasting.
+4. there may be a chance of loss of information in this typecasting.
+
+The following are various possibilities where explicit typecasting is required.
+
+byte<-------short<-----\
+			\
+			 \
+			  \<---int <-------long<-------float<-----double
+    	                  /
+		    	 /
+		   	/
+char<------------------/
+
+
+e.g int x = 130
+byte b = (byte) x;
+
+sopln(b);// -126
+
+whenever we are assigning bigger datatype value to smaller datatype variable by explicit typecasting the most significant bits will be lost we have to consider only LSB(least significant bits).
+
+Explanation of above example:
+
+2 - 130 - 
+2 - 65 - 1
+2 - 32 - 1
+2 - 16 - 0
+2 - 8 - 0
+2 - 4 - 0
+2 - 2 - 0
+2 - 1 - 0
+
+
+int x = 130 => 0000 ... 00010000010		2s complement
+byte b = (byte)x==>1 0 0 0 0 0 1 0  	1 1 1 1 1 0 1	
+						  1 1
+					------------------
+					1 1 1 1 1 1 0
+
+
+					 6   5   4   3   2   1
+					2   2   2   2   2   2
+					
+					= 64 + 32 + 16 + 8 + 4 + 2 + 0
+					= 126
+
+for short datatypes also same conversion happening.
+
+if we assign floating point values to the integral type by explicit typecasting the digits after the decimal point will be losg.
+
+double d = 130.456
+
+int x = (int) d;
+
+sopln(x);// 130
+
+byte b = (byte) b; 
+
+sopln(b); // -126
+
+________________________________
+Assignment operator
+________________________________
+
+There are three types of assignment operators
+
+1. Simple Assignment
+e.g int x = 10;
+
+2. chained Assignment
+
+e.g int a, b, c, d;
+
+int a = b = c = d = 20;
+
+sopln(a + "..." + b + "..." + c + "..." + d);
+
+we can't perform chained assignment directly at the time of declaration.
+
+e.g int a = b = c = d;
+
+invalid
+CE: cannot find symbol : variable B location : class Test
+
+BUT
+
+int b, c , d;
+
+int a = b = c = d = 20;
+
+valid
+
+______________________________
+compound assignment operator
+______________________________
+
+some time assignment operator mixed with some other operator. Such type of assignment operator are called compound assignment operator
+
+e.g 
+int a = 10;
+a += 20;
+sopln(a); // 30
+
+the following are all possible compound assignment operators in java.
+
++= | &= |>>=	--------->signed rightshift operator
+-= | |= |>>>=   --------->unsigned rightshift operator
+*= | ^= |<<=	--------->signed leftshift operator
+/= |    |
+%= |    |
+
+
+in the case of compound assignmetn operators internal typecasting will be performed automatically.
+
+e.g 
+
+byte b = 10;
+
+b = b + 1;
+
+sopln(b);//CE:Possible loss of precision found int required byte.
+
+e.g
+
+byte b = 10;
+
+b++;
+
+sopln(b);//11
+
+
+e.g
+
+byte b = 10;
+
+b += 1;
+
+sopln(b);//11
+
+
+because : in case compound assigment operator operation is performed as 
+
+b  = (byte) (b + 1); 
+
+
+e.g
+
+byte b = 127;
+
+b += 3;
+
+sopln(b);//-126
+
+
+int a, b, c, d;
+
+a = b = c = d = 20;
+
+a += b -= c *= d /= 2;
+
+sopln(a + "..." + b + "..." + c + "..." + d);	//-160...-180...200...10
+
+____________________________
+Conditional operator (?, :)
+____________________________
+
+
+The only possible ternarry operator in java is conditional operator.
+
+Syntax : 
+int x = 10 > 20 ? 30 : 40;
+
+sopln(x);//30
+
+we can perform nesting of conditional operator also.
+
+int x = 10 > 20 ? 30 : ((40 > 50) ? 60 : 70);
+
+sopln(x);//70
+
+
+_________________
+new Operator
+_________________
+
+we can use new operator to create object.
+
+e.g Test t = new Test();
+
+Note : 1. After creating an object constructor will be executed to perform initialization of an object hence constructor is not for creation of object and it is for initialization of an object.
+
+2. in java we have only new keyword but not delete keyword because distruction of useless objects is the responsiblity of garbage collector.
+
+
+_________________
+[] operator
+_________________
+we can use this operator to declare and create arrays.
+
+e.g int[] x = new int[10];
+
+java Operator presidence chart
+_______________________________
+
+1. unary operators
+ presidence a: [], x++, x--
+ presidence b: ++x, --x, ~, !
+ presidence c: new <type-cast>
+2.Arithmatic operators
+ presidence a: *, /, %
+ presidence b: +, -
+3.Shift operators
+ presidence a: >>, >>>, <<
+4.Comparision Operators
+ <, <=, >, >=, instanceof
+5.Equality operators
+  ==, !=
+6.Bitwise operators
+  presidence a:&
+  presidence b:^
+  presidence c:|
+7.short circuit operators
+  presidence a:&&,
+  presidence b:||
+8. Conditional operators
+  ?:
+9. Assignment operators
+   =, +=, -=, *=, /=, %=, ...
+
+
+Evaluation order of java operants
+___________________________________
+
+in java we have only operator presidence but not operand presidence before applying any operator all operands will be evaluated from left to right.
+
+Start--------to--------->end
+
+class Test{
+	public static void main(String[] args){
+		sopln(m1(1) + m1(2) * m1(3) / m1(4) + m1(5) * m1(6));
+	}
+	public static int m1(int i){
+		sopln(i);
+		return i;
+	}
+}
+
+output : 
+
+1
+2
+3
+4
+5
+6
+32
+
+Explanation
+first 
+1
+2
+3
+4
+5
+6 will get printed and in main method all operations will get performed.
+
+1 + 2 * 3 / 4 + 5 * 6
+1 + 6 / 4 + 5 * 6
+1 + 1 + 5 * 6
+1 + 1 + 30
+2 + 30
+32
+
+
+new vs newInstance()
+
+new 				newInstance()
+_________________________________________________________
+we can use new operator to create an object if we know class name at the begining.
+
+e.g Test t = new Test();
+Student s = new Student();
+Customer c = new Customer();
+
+newInstace() is a method present in 'Class' class we can use newInstance() method to create object if we don't know class name at the begining and it is available dynamically at runtime.
+
+e.g 
+
+class Student{
+
+}
+
+class Customer{
+
+}
+class Test{
+	public static void main(String[] args)throws Exception{
+		Object o = Class.forName(args[0]).newInstance();
+		System.out.println("Object created for : " + o.getClass().getName);
+	}	
+}
+
+output:
+
+java Test Student
+
+object created for student
+
+java Test Customer
+
+object created for Customer
+
+
+java Test java.lang.String
+
+object created for java.lang.String
+
+
+In the case of new operator based on our requirement we can invok any constructor
+
+e.g Test t = new Test();
+
+Test t1 = new Test(10);
+Test t2 = new Test("Testing");
+
+but newInstance() method internally calls no argument constructor to use newInstance() method compulsory corresponding class you should contain no argument costructor otherwise we will get run-time exception saying InstantieationException
+
+While using new operator at run-time if the coressponding '.class' file is not available then we will get run-time exception saying no-classDdefFoundError : Test
+
+e.g
+
+Test t = new Test();
+
+At RunTime :  if test.class file is not available then we will get run-time exception saying No-classDefFoundError : Test 
+
+while using newInstance() method at run-time if the corresponding '.class' file not available then we will get run-time exception saying ClassNotFoundException.
+
+e.g 
+----------------------------------------------------|
+Object o =  Class.forName(args[0]).newInstance();   |
+----------------------------------------------------|
+java Test test123;
+
+at runtime if test123.class file is not available then we will get run-time exception saying ClassNotFoundException:Test123.
+
+
+
+Differences between new and newInstance
+
+new						newInstance
+_____________________________________________________________________________________________
+
+1. it is operator in java		1. It is a method present in 
+					   java.lang.Class
+
+2. we can use new operator to create	2. we can use this method to create
+   object if we know class name at the     object if we don't know class name 
+   begining.				   at the begining and it is available
+					   dynamically at run-time
+
+3. To use new operator class not 	3. to use newInstance() method compulsary
+   requiredto contain no-arg 		   class should contain no-argumetn constructor
+   constructor				   otherwise we will get InstantieationException()
+
+4. At run-time if .class file not	4. At run-time if .class file not available 
+   available then we will get run-time     then run-time exception saying 
+   exception saying 			   ClassNotFoundException.
+   NoClassDefFoundError.
+
+_____________________________________________________________________________________________
+
+
+Difference between ClassNotFoundException and NoClassDefFoundError
+
+for hard codded class names, at runtime if the corresponding .class file is not available then we will get run-time exception saying NoClassDefFoundError, which is unchecked.
+
+e.g Test t = new Test();
+
+at runtime if Test.class file is not available then we will get runtime exception saying NoClassDefFoundError : Test
+
+for dynamically provided class name at runtime if the corresponding .class file is not available then we will get run-time exception saying ClassNotFoundException which is checked exception.
+
+Object o = Class.forName(args[0]).newInstance();
+
+java Test Student
+
+at run time if student.class file not available then we will get run-time exception saying ClassNotFoundException : student
+
+
+difference instanceof and isInstance() 
+instanceof is an operator in java. We can use instanceof to check whether the given object is of particular type or not and we know the type at the begining.
+
+e.g Thread t = new Thread();
+
+sopln(t instanceof Runnable);
+sopln(t instanceof Object);
+
+isInstance is a method present in java.lang.Class
+we can use isInstance() method to check whether the given object is of particular type or not.
+
+and we don't know the type at the begining and it is available dynamically at runtime. 
+
+class Test{
+	public static void main(String[] args)throws Exception {
+		Thread t = new Thread();
+		sopln(Class.forName(args[0]).isInstanceof(Test);
+
+	}
+}
+
+java Test Student
+true
+
+java Test String
+
+false
+
+isInstance() method is method equivalent of instanceof operator.
+
+

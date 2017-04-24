@@ -1,0 +1,286 @@
+Main Method
+______________
+
+whether class contains main method or not and whether main method is declared according to requirement or not these things won't be checked by compiler at runtime JVM is responsible to check these things if JVM unable to find main method then we will get run-time exception saying no such method error:main 
+
+e.g 
+class Test{
+
+}
+
+javac Test.java
+
+java Test:
+
+RE : java.lang.NoSuchMethodError:main
+
+At runtime JVM always suggest for the main method with the following prototype
+
+e.g
+
+public 			static 				void 				main(			String[] args)
+  |			  |				 |				  |			   |
+  | 			  |				 |				  |			   |
+To call by JVM		without any object		main Method won't return	this is name which	Command line
+from any where		also jvm has to call 		anything to JVM 		is confitured in JVM	arguments
+			this method
+
+The above syntax is very strict and if we perform any change then we will get run time exception saying no such method error:main
+
+Even though above syntax is very strict the following changes are acceptable.
+
+1. instead of public static we can take static public i.e the order of modifiers is not important.
+2. we can declare string[] in any acceptable form.
+e.g main(String[] args)
+main(String []args)
+main(String args[])
+
+instead of args we can take any valid java identifier
+
+main(String[] test)
+
+we can replace String[] with var-arg parameter
+e.g main(String... args)
+
+we can declare main method with the following modifiers
+____________________________________________________________
+1. final 2. synchronized 3. strictfp 
+
+e.g public static final synchronized strictfp(String... test)
+
+Q. Which of the following main method declarations are valid.
+
+1. public static void main(String args) 				//invalid
+2. public static void Main(String[] args)				//invalid
+3. public void main(String[] args) 					//invalid
+4. public static int main(String[] args)				//invalid
+5. public synchronized strictfp void main(String[] args)		//invalid
+6. public synchronized strictfp static void main(String[] args)		//valid
+7. public static void main(String... args)				//valid
+
+
+Q 2. in which of the above cases we will get compile time error
+
+we won't get compile time error any wherer but except last 2 cases in remaining we will Runtime exception saying no such method error:main.
+
+Case 1: Overloading of the main() method is possible but jvm will always call string[] argument main method only the other overloaded method we have to call explicitly like normal method call.
+
+e.g
+class Test{
+	public static void main(String[] args){
+		sopln("String array ");
+	}
+	public static void msin(int[] args){
+		sopln("int array ");
+	}
+
+}
+
+output:
+String array.
+
+Case 2 : inheritance concept applicable for main() method hence while executing child class if child doesn't contain main() then parent class main method() will be executed.
+
+class P{
+	public static void main(String[] arr){
+		sopln("parent main");				
+	}
+}
+
+class c extends p{
+
+}
+
+output
+
+//java p
+
+parent main
+
+//java c
+
+parent main
+
+Case 3:
+
+class P{
+	public static void main(String[] args){
+		sopln("parent main");
+	}
+}
+
+class C extends P{
+	public static void main(String[] args){
+		sopln("child main");
+	}
+}
+
+output for java p:
+
+parent main 
+
+output for java C:
+child main
+
+it seems overriding concept applicable for main() but it is not overrding and it is method hiding.
+
+Note : for main method inheritance and overloading concepts are applicable but overriding concept is not applicable.
+instead of overriding method hiding is applicable
+______________________________________________________________
+java 1.7 version inhancement with respect to main method
+______________________________________________________________
+
+until 1.6 version if the class doesn't contain main method then we will get runtime exception saying NoSuchMethodError:main
+
+but from 1.7 version onwards instead of no such method error we will get more allobrated error information 
+
+e.g class Test{
+
+}
+
+1.6 Version
+
+javac Test.java
+java Test
+
+NoSuchMethodError : main
+
+1.7 version
+javac Test.java
+java Test
+
+Main method not found in class test please define the main method as : public static void main(String[] args)
+
+from 1.7 version onwards main method is manidatory to start program execution hence even though class contains static block it won't be executed if the class doesn't contain main() method.
+
+e.g
+
+class Test{
+	static{
+		sop("static block");	
+	}
+}
+
+output:
+1.6 version
+
+javac Test.java
+java Test
+
+static block
+RE:noSuchMethodFoundError:main
+
+in 1.7 version
+
+javac Test.java
+java Test
+
+Error : Main method not found in class Test...
+
+e.g 2
+
+class Test{
+	static{
+		sopln("Static block");
+		exit(0);
+	}
+}
+
+output:
+1.6 version
+javac Test.java
+java Test
+
+static block
+
+
+in 1.7 version
+
+javac Test.java
+java Test
+
+Error : Main method not found in class Test...
+
+case 3 : 
+
+class Test{
+	static{
+		sopln("static block");
+	}
+	public static void main(String[] args){
+
+	}
+}
+
+output:
+1.6 version
+javac Test.java
+java Test
+
+static block
+
+
+in 1.7 version
+
+javac Test.java
+java Test
+
+static block
+
+
+1.6 version flow
+
+	Identification
+	of static members
+	   |
+      	   |
+	Execute static block         not available
+	and static variable----------------------
+	assignments				 |
+	  |					 |
+	  |					 |
+	check for main				 |
+	method					 |
+	  |					 |
+	  |					 |
+	  |		if available		 |
+	  |					 |
+	Execute main		RE: noSuchMethodError:main
+
+
+
+in 1.7 version
+
+	Identification
+	of static members
+	   |
+      	   |
+	check for main				 Not available
+	method		---------------------------------
+	   |						|
+	   |  if available				|
+	   |						|
+	   |						|
+	Identificaion of 		NoSuchMethodError:main
+	all static members
+	   |
+	   |
+	   |
+	Execution of static 
+	variable assignment
+	and static block
+	  |		
+	  |		
+	  |		
+	  |		
+	Execute main	
+
+
+Q. Without writing main method is it possible to print some statements to the console?
+
+Yes but using static block.
+But this rule is applicable until 1.6 version 
+but 1.7 version onwards it is impossible to print some statement to the console without writing main method.
+
+
+

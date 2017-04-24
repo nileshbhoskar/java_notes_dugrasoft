@@ -1,0 +1,210 @@
+	DataTypes in java
+__________________________________________________
+
+1. in java every variable and every expression has some type.
+2. each and every data type is clearly defined.
+3. every assignment should be checked by compiler for type compatibility.
+4. because of above resons we can conclude java language is strongly typed programming language.
+5. java is not  considered as pure object oriented programming language because several oop features are not satisfied by java(like operator overloading and multiple inheritance etc.).
+6. more over we are depending on premitive datatypes which are non objects.
+
+
+
+				primitive data types
+					  /\
+					/   \
+				      /       \
+				    /           \
+				  /               \
+				/                   \
+
+			Numeric DataType	Non Numeric DataType
+			
+			      /   \			a. char
+			    /       \			b. boolean
+			  /	      \
+			/		\
+		      /			  \
+		Integral DataType    Floating point 
+					data type
+			a. byte		a. float
+			b. short	b. double
+			c. int
+			d. long				
+
+Except boolean and char remaining data types are considered as signed data types because we can represent both positive and negative numbers.
+
+
+byte DataType: 
+
+Byte size 1byte(8 bits)
+max value +127
+Min Value -128
+
+Range -128 to +127
+
+_________________________________________________________________
+Size 	|	1 |  1 	|    1	|   1	|   1  	|   1	|   1	|
+     	|	  |	|	|	|	|	|	|
+__________________________________________________________________
+Signed		 6   5	      4	     3	     2	     1	     0
+bit		2   2	     2 	    2	    2	    2 	    2	
+
+Signed bit represent +ive or -ive value
+
+1 + 2 + 4 + 8 + 16 + 32 + 64 = 127
+
+
+the most significant beat access signed bit
+0 means positive number, 1 means negative number. Positive number will be represented directly in memory where as negative numbers will be represented in 2's complement form
+
+
+byte b = 10; //valid
+byte b = 127; //valid
+byte b = 128; //invalid 
+Compile Error : possible loss of precision found: int required: byte
+byte b = 10.5 //invalid
+Compile Error : possible loss of precision found: double required: byte
+
+byte b = true
+Compile Error : incompatible type
+found : boolean
+required : byte
+
+byte is best choice if we want to handle data in terms of stream either from file or from the network(file supported form or network supported form is byte).
+
+short : this is most rearly used datatype in java 
+
+size = 2 bytes(16 bits)
+	  15      15
+range : -2    to 2   - 1
+[-32768 to 32767]
+
+short s = 32767; valid
+short s = 32768; CE : PLP found : int required : short
+short s = 10.5; CE : PLP found : double required : short
+short s = true; CE: incompatable types found boolean required:short
+
+short data type is best sutaible for 16- bit processor like 8085 but these processers are completely out dated and hence corresponding short data type is also outdated data type.
+
+_______________________
+int data type : 
+_______________________
+
+the most commonly used data type in java is "int" 
+size - 4bytes (32 bits)
+	32	32
+range -2   to  2   -1
+
+[-2147483648 to 2147483647]
+
+e.g int x = 2147483647; //valid
+int x = 21474848; //invalid CE : Integer number too large
+int x = 21474848l; //invalid CE : Possible loss of precision. found : Long required : int.
+int x = true; //incompaitable type 
+		found : boolean
+		required : int
+___________________
+long data type:
+___________________
+
+Some time int may not enough to hold big values then we should go for long type.
+e.g 1. The amount of distance traveled by light in 1000 days, to hold this value int may not enough we should go for long data type
+
+e.g 1.long l = 126000 * 60 * 60 * 24 * 1000; miles
+e.g 2. the number of characters present in a big file may excid int range hence the return type of length method is long but not int.
+File f = new File();
+long l = f.length();
+
+Size : 8 bytes(64bits)
+	  63	  63
+range : -2   to  2   -1
+
+Note : all the above data types(byte, short, int, long) ment for representing can be used to represent integral value if we want to represent
+floating point values then we should go for floating point datatypes.
+______________________________
+Floating point data types : 
+______________________________
+_______________________________________________
+float		    |	double
+____________________|__________________________
+1. 5 to 6 	    |	1. 14 to 15
+2. Single Precision |   2. Double precision
+3. Size 4 bytes	    |   3. Size 8 bytes
+4. Range 	    |   4. Range
+  -3.4e38 to 3.4e38 |      -1.7e308 to 1.7e308
+____________________|___________________________
+
+______________________
+Boolean data type : 
+______________________
+
+Size : NA[VM dependent]
+Range : NA [but allowed values are true or false].
+ 
+boolean b = true; valid
+
+boolean b = 0; CE : can not find symbol
+		symbol : variable True
+		location : class Test
+
+boolean b = "True"; CE : incompatable types
+			found : java.lang.String
+			required : boolena
+
+
+int x = 0;
+
+if(x){
+sop("Hello");
+}else {
+sop("hi");
+}
+
+error : incompatable types found: int required boolean
+
+while(1){sop("hello");}
+
+error : incompatable types found: int required boolean
+
+char data type :
+______________________
+
+old languages (like c or c++) are ASCII code based and number of allowed different ASCII code characters are >= 256
+to represent these 256 characters 8 bits are enough hence the size of char in old languages is 1 byte
+but java is unicode based number of different unicode characters are > 256 and <= 65536 
+to represent these many characters 8 ibts may not enough compulsary we should go for 16 bits hence the size of char in java is 
+2 bytes.
+
+Size 2 bytes
+range 0 to 65536
+
+
+Summary of java premitive data types : 
+
+data type           Size            range 	               wrapper class                 default value
+				   7      8
+1. byte		    1 byte 	 -2  to  2 (-128 to 127)	Byte				0
+
+				   15     15
+2. short	    2 byte	 -2  to	 2 (-32768 to 32767)	Short				0
+
+				  31       31	
+3. int		    4 byte	 2	  2  -1			Integer				0
+				  (3147483648 to 3147483647)	
+				
+				 63           63
+4. long 	    8 byte	2	     2    - 1		Long				0
+				
+5. float	    4 byte	-3.4e38 to 3.4e38		Float				0.0
+6. double	    8 byte	-1.7e308 to 1.7e308		Double				0.0
+7. boolean	    NA		NA(true or false)		Boolean				false
+8. char		    2 byte	0 to 65535			Character			0 [represents space ' ' character]
+
+
+Note : null is default for object reference we can't apply for premitives if we are trying to use for premitive then we will get compile type error.
+
+e.g char ch = null; CE : incompatable types 
+			found : null
+			required : char
+

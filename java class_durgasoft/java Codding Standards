@@ -1,0 +1,160 @@
+_________________________
+Java Codding Standards
+_________________________
+
+Whenever we are writing java code it is highly recommanded to follow codding standards
+
+whenever we are writing any component it's name should reflect the purpose of that component(functionality)
+
+The main advantage of this approach is readability and maintainablity of the code will be improved.
+
+e.g
+
+worst kind of practice to write addition program
+
+class A{
+	
+	int m1(int x1, int x2){
+		return x1 + x2;
+	}
+}
+
+Good kind of practice to write addition program
+
+package com.test.scjp
+class Calculator{
+	int sum(int number1, int number 2){
+		return number1 + number2;
+	}
+}
+
+coading standards for classes
+_______________________________
+
+usually class names are nouns should start with upper case characters and if it contains multiple words every inner word should start with upper case character.
+
+e.g String
+StringBuffer
+Dog
+Account
+
+coding standards for interfaces
+__________________________________
+
+usually interface names are adjectives 
+should starts with upper case character and if it contains multiple words every inner word should starts with upper case character.
+
+e.g Runnable
+Compairable
+Seriazible
+
+coding standards for methods
+_______________________________
+usually method names are either verbs or verb noun combination
+
+should starts with lower case alpha bet symbol and if it contains multiple words then every inner word should starts with upper case character(camel case convension)
+
+e.g print();
+sleep();
+run();
+eat();
+starts()
+these are verbs
+
+getName();
+setSalary();
+
+these are verb nown combinations 
+
+
+_________________________________
+Coding standards for variables
+_________________________________
+
+usually variable names are nouns should starts with lowe case alphabet symbols and if it contains multiple words then every inner word should starts with upper case character
+
+Camel Case convension
+
+e.g name, age, mobileNumber etc
+
+codding standards for constants
+_________________________________
+usually constants names are nouns should contain only upper case characers and if it contains multiple words then these words are seprated with underscore '_' symbol
+
+e.g
+MAX_VALUE
+MAX_PRIORITY
+NORM_PRIORITY
+PI
+
+Note : Usually we can declare constants with public static and final modifiers 
+_________________________________
+java bean codding standards
+_________________________________
+
+a java bean is simple java class with private properties and public getter and setter methods 
+
+e.g
+
+public class StudentBean{
+	private void name;
+	public setName(String name){
+		this.name = name;
+	}
+	
+	public String getName(){
+		return name;
+	}
+}
+ 
+class name ends with ends with bean is not official convension from sun.
+__________________________
+Syntax for setter method
+__________________________
+
+it should be public method the return type should be void method name should be prefixed with set.
+it should take some argument i.e it should not be no-argument method.
+
+syntax for getter method
+_________________________
+
+It should be public method the return type should not be void method name should prefixed with get the it should not take any argument.
+
+* Note : for boolean properties getter method name can be prefixed with either get or is but recommanded to use is.
+
+e.g 
+
+private boolean empty;
+
+public boolean getEmpty(){
+	return empty;
+}
+
+or 
+
+public boolean isEmpty(){
+	return empty;
+}
+
+coading standards for listener
+_________________________________
+Case 1 : to register a listener
+
+method name should be prefixed with add
+
+e.g 
+public void addMyActionListener(myActionListener l) // valid
+
+public void registerMyActionListener(myActionListener l)// invalid
+
+public void addMyActionListener(ActionListener l)// invalid
+
+To unregister method name should prefixed with remove
+
+public void removeMyActionListener(myActionListener l) // valid
+
+public void unregisterMyActionListener(myActionListener l) // invalid
+
+public void removeMyActionListener(ActionListener l)//invalid
+
+public void deleteMyActionListener(MyActionListener l)//invalid

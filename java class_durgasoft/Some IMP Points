@@ -1,0 +1,13 @@
+Inside static block or static method if we are accessing null object values then we will get following error
+
+Exception in thread "main" java.lang.ExceptionInInitializerError
+Caused by: java.lang.NullPointerException
+	at StaticFlowTest.m1(StaticFlowTest.java:21)
+	at StaticFlowTest.<clinit>(StaticFlowTest.java:7)
+
+Inside instance block or method if we are accessing null object values the we will get following error
+
+Exception in thread "main" java.lang.NullPointerException
+	at InstanceTest.m1(InstanceTest.java:21)
+	at InstanceTest.<init>(InstanceTest.java:5)
+

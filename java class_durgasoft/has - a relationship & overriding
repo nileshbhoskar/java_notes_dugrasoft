@@ -1,0 +1,349 @@
+1. Has a relationship is also known as composition or aggrigation.
+2. there is no specific keyword to implement has a relation but most of the times we are depending on new keyword.
+3. the main advantage of has a relationship is reusability of the code.
+e.g
+
+class Car{
+	Engine e = new Engine();
+}
+
+Car has a engine reference.
+
+Difference between composition and aggrigation.
+
+Without existing container object if there is no chance of existing contained objects then container and contained objects are strongly associated and this strong association is nothing but composition.
+
+e.g 
+university consist of several departments without existing university there is no chance of existing department hence university and department are stronly associated and this strong association is nothing but composition.
+
+suppose university contains several courses
+_________________
+Aggrigation
+_________________
+
+Without existing container object if there is chance of existing contained object then container and contained objects are weakly associated and this weak association is nothing but aggrigation. 
+
+e.g 
+Department consiste several professors without existing department there may be a chance of existing professor objects hence department and professor objects are weakly associated and this weak association is nothing but aggrigation.
+
+
+
+				professor 1
+
+
+				professor 1
+				
+	  
+Department----------------------professor 1
+
+
+				professor 1
+
+
+				professor 1
+container objects		contained objects
+
+
+Note : 1. in composition objects are strongly associated where as in aggrigation objects are weakly associated.
+
+2. In composition container object holds directly contained objects where as in aggrigation container object holds just references of contained objects.
+
+
+Is-A vs Has-A
+________________
+
+Is-A
+
+1. if we want total functionality of a class automatically then we should go for is-a relationship
+
+e.g complete functionality of Person class required for student class
+
+2. if we want part of the functionality then we should go for has-a relationship.
+
+e.g test class contains 100 methods but within demo class I required only 1 or 2 methods then go for has-A relationship.
+
+______________________
+method signature
+______________________
+
+in java method signature consist of method names followed by argument types
+
+e.g public static int m1(int i, float f)
+
+m1(int,float) is method signature
+
+return type is not part of method signature in java
+
+compiler will use method signature to resolve method calls
+
+e.g
+
+class Test{
+	public void m1(int i){}
+	
+	public void m2(String s){}
+}
+
+Test t1 = new Test();
+
+t1.m1(10); //valid
+t1.m2("Durga");//valid
+t1.m3(10.5);//invalid : CE: cannot find symbol : method m3(double) Location : Test
+
+
+within a class two methods with the same signature not allowed 
+e.g
+
+class Test{
+	public void m1(int i){
+
+	}
+
+	public int m1(int i){   //invalid : m1(int) is allready defined
+		return temp
+	}
+}
+
+_________________
+overloading
+_________________
+
+Two method are said to be overloaded if and only if both methods having same name but different argument types 
+
+in 'C' language method overloading concept is not available hence we can't declare multiple methods with same name but different argument types if therer is change in argument type compulsary we should go for new method name which increases complexity of programming
+
+e.g
+//abs absolute value
+abs(int i)
+labs(long l)
+fabs(float f)
+
+but in java we can declare multiple methods with same name but different argument types such types of methods are called overloaded methods.
+
+abs(int i)	|
+abs(long l)	| 	overloaded methods
+abs(float f)	|
+
+having overloading concept in java reduces complexity of programming
+
+
+class Test{
+
+	public void m1(){
+		sopln("no-arg");		
+	}
+	public void m1(int i){
+		sopln("int-arg");
+	}
+	public void m1(double d){
+		sopln("double-arg");		
+	}
+
+	public static void main(String[] args){
+		t1.m1();	//m1() no arg method
+		t1.m1(10);	//m1(int) int arg method
+		t1.m1(10.5);	//m1(double) double arg method
+	}
+}
+
+output : 
+no-arg	
+int-arg
+double-arg
+
+these are called as overloaded methods.
+
+**** in overloading method resolution always takes care by compiler based on reference type hence overloading is also considered as compile time polymorphism or static polymorphism or early binding
+
+_____________________________________________
+Case 1 : Automatic promotion in overloading
+_____________________________________________
+
+while resolving overloaded methods if exact match is not available then we won't get any compile time error immediately first it will promote argument to the next level and check whether matched method is available or not.
+
+if matched method is available then it will be considered and if matched method is not available then compiler promotes argument once again to the next level. This process will be continued until all possible promotions, still if matched method is not available then we will get compile time error.
+
+The following are all possible promotions in overloading 
+
+byte---------------> short---->\
+				 \
+				   \
+				     \
+				      int--------->long---------->float----------->double
+				   /
+				 /
+			       /
+			     /
+char------------------------>
+
+this process automatic promotion in overloading.
+
+
+e.g
+
+class Test{
+	public void m1(){
+		System.out.println("No argument method");
+	}
+
+	public void m1(int n){
+		System.out.println("int argument method");
+	}
+
+	public void m1(float f){
+		System.out.println("float argument method");
+	}
+	
+	public static void main(String[] args){
+		Test t1 = new Test();
+
+		t1.m1();		//no argument method
+		t1.m1(10);		//int argument method
+		t1.m1(10f);		//float argument method
+		t1.m1('a');		//int argument method
+		t1.m1(10l);		//float argument method
+		t1.m1(10s);		//CE: cannot find symbol location m1() class Test
+	}
+}
+
+Case 2 : 
+
+class Test{
+	public void m1(String str){
+		System.out.println("String version method");
+	}
+
+	public void m1(Object obj){
+		System.out.println("Object version method");
+	}
+
+	public static void main(String[] args){
+		Test t1 = new Test();
+
+		t1.m1(new Object());		//Object version method
+		t1.m1("test");  		//String version method
+		t1.m1(null);			//String version method
+	}
+}
+
+
+
+Note : while resolving overloaded methods compiler will always gives preference for child type argument when compared with parent type argument 
+
+Case 3 : 
+
+class Test{
+	public void m1(String str){
+		System.out.println("String version method");
+	}
+
+	public void m1(StringBugger obj){
+		System.out.println("StringBuffer version method");
+	}
+
+	public static void main(String[] args){
+		Test t1 = new Test();
+
+		t1.m1("test");  		//String version method
+		t1.m1(new StringBuffer("test")); //StringBuffer version method
+
+
+		t1.m1(null);			//CE: reference to m1 is ambegious
+
+	}
+}
+
+
+Case 4 : 
+
+class Test{
+	public void m1(int i, float f){
+		System.out.println("int float version method");
+	}
+
+	public void m1(float f, int i){
+		System.out.println("float int version method");
+	}
+
+	public static void main(String[] args){
+		Test t1 = new Test();
+
+		t1.m1(10, 10.5f);  		//int float version method
+		t1.m1(10.5f, 10); 		//float int version method
+
+
+		t1.m1(10, 10);			//CE: reference to m1 is ambegious
+		t1.m1(10.5f, 10.5f);		//CE: Can not find symbol method : m1(float, float) location : Test
+
+	}
+}
+
+
+Case 5 : 
+
+class Test{
+	public void m1(int i){
+		System.out.println("int version method");
+	}
+
+	public void m1(int... i){
+		System.out.println("var-args version method");
+	}
+
+	public static void main(String[] args){
+		Test t1 = new Test();
+
+		t1.m1();  		//var-args version method
+		t1.m1(10, 10); 		//var-args version method
+
+		t1.m1(10);		//int version method
+
+	}
+}
+
+
+Note : in general var-arg method will get least priority i.e. if no other method matched then only var-arg method will get the chance.
+it is exactly same as default case inside switch. 
+
+Case 6 : 
+
+class Animal{
+
+}
+
+class Monkey extends Animal{
+
+}
+
+class Test{
+
+	public void m1(Animal a1){
+		System.out.println("Animal version");
+	}
+
+	public void m1(Monkey m1){
+		System.out.println("Monkey version");
+	}
+
+	public static void main(String... args){
+		Animal a = new Animal();
+
+		a.m1(a);		//Animal version
+		
+		Monkey m = new Monkey();	
+		m.m1(m);		//Monkey version
+
+		Animal a1 = new Monkey();
+
+		a1.m1(a1);		//Animal version	
+		
+		a1.m1((Monkey)a1);	//Monkey version	
+	}
+
+}
+
+
+Note : in overloading method resolution always takes care by compiler based on reference type.
+       in overloading runtime object won't play any role .
+
+

@@ -1,0 +1,231 @@
+Core Java with OCJP/SCJP : Language Fundamentals Part-1 || Java Identifiers and Reserved Words :
+________________________________
+java Lauange fundamentals :
+________________________________
+
+1. Identifiers
+2. reserves
+3. datatypes
+4. literals
+5. arrays
+6. types of variables
+7. varargs methods
+8. main method
+9. Command line arguments
+10. Java Coding standards
+
+______________
+Identifier : 
+______________
+A name in java program is called identifier which can be used for identification purpose, it can be method name or variable name class name or lable name. 
+
+e.g : 
+
+class Test{
+	
+	public static void main(String[] args){
+		int x = 10;
+	}
+}
+
+Identifiers in above examples : 
+
+1. Test, 2. main, 3. args, 4. String, 5. x
+
+_______________________________________
+Rules for Defining java identifiers
+_______________________________________
+1. only allowed character in java identifiers are.
+
+ a to z, A to Z, 0 to 9, '$', '_'
+
+if we are using any other character we will get compile time error.
+
+e.g total_number //is valid
+
+total# //is invalid
+
+2. identifiers can't start with digit.
+
+total123 //is valid
+123total //is invalid
+
+3. java identifiers are case sensitive offcourse java language itself is treated as case sensitive programming language.
+
+e.g class Test{
+	int number = 10;
+	int Number = 20;
+	int NUMBER = 30;
+}
+
+
+we can differentiate with case
+
+4. there is no length limit for java identifiers but it is not recommanded to take too lengthy identifiers
+
+5. we can't use reserved words as identifiers
+
+e.g int x = 10; is valid
+int if = 20; is invalid(CE : if is reserved word).
+
+6. all predefined java class name and interface name we can use as identifiers.
+
+e.g class Test{
+	public static void main(String[] arg){
+		int String = 10;
+		int runnable = 999;
+
+		System.out.println(String);
+		System.out.println(runnable);
+	}
+}
+
+Output : 
+
+10
+999
+
+even though it is valid but it is not a good programming practic because it reduces redability and creates confusion.
+
+total_number 	//valid
+total# 		//invalid
+123total 	//invalid
+total123 	//valid
+ca$h 		//valid
+_$_$_$_ 	//valid
+all@hash 	//invalid
+java2share 	//valid
+Integer 	//valid
+Int 		//valid
+int 		//invalid
+
+__________________________
+Reserved words in java:
+__________________________
+
+1. in java some words are reserved to represent some meaning or functionality such type of words are called reserved words.
+
+
+						reserved words(53)
+						    /        \
+	      					   /          \
+						  /            \
+						 /              \
+						/                \
+					       /                  \
+                                                                   
+					keyword(50)            reserved litrals(3)
+					   /   \		   true
+					  /	\ 		   false
+					 /	 \		   null
+					/	  \
+				       /	   \
+                                      /		    \
+  				    used 	unused	
+				keywords(48)	keywords(2)
+
+
+
+1. key words for data types
+
+byte, short, int ,long, float, double, char, boolean
+
+2. keywords for flow control
+if, else, switch, case, default, do, while, for, break, continue, return
+
+3. keywords for modifiers
+
+public, private, protected, static, final, abstract, synchronized, native, strictfp(1.2), transient, volatile(,default).
+
+4. keywords for exception handling
+
+try, catch, finally, throws, throw, assert(1.4).
+
+5. class related keywords.
+
+class, interface, extends, implements, package, import, 
+
+6. object related keywords
+
+new, instanceof, super, this,
+
+7. void return type keyword
+
+in java return type is manidetory, if a method won't return anything then we have to declare that method with void return type.
+
+but in 'C' language return type is optional and default return type is int.
+
+8. Unused keywords
+
+a. goto
+
+usage of goto create several problems in old languages and hence sun people bane this keyword in java,
+
+b. const
+
+use final instead of const.
+
+Note : goto and const are unused keywords and if we are trying to use we will get compile time error.
+
+9. Reserved literals 
+
+true, false values for boolean datatypes
+
+null is default value for object reference.
+
+10. enum(1.5) keyword
+
+we can use enum to define a group of named constants. 
+
+e.g enum Month{
+	Jan, Feb, ...., Dec;
+} 
+
+enum beer{
+	KF, KO, RC, FO;
+}
+
+conclusions
+
+1. All 53 reserved words in java contains only lower case alpha bet symbols.
+2. in java we have only new keyword and there is no delete keyword because 
+   distruction of useless objects is responsibility of garbage collector
+
+3. The follwoing are new keywords in java.
+
+   1. strictfp(1.2)
+   2. assert(1.4)
+   3. enum(1.5)
+
+4. strictfp but not strictFp
+   instanceof but not instanceOf
+   synchronized but not synchronize
+   extends but not extend
+   implements but not implements
+   import but not imports
+   const but not constant
+
+
+Q. Which of the follwing list contains only java reserved words.
+
+1. new, delete.
+2. goto, constant.
+3. break, continue, return, exit.
+4. final, finally, finalize.
+5. throw, throws, thrown.
+6. notify, notifyAll.
+7. implements, extends, imports.
+8. sizeOf, instanceof.
+9. instanceOf, strictFp.
+10. byte, short, Int.
+11. None of above.
+
+
+Q. Which of following are java reserved words?
+
+1. public 
+2. static
+3. void 
+4. main 
+5. string
+6. args.

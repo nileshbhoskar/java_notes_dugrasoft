@@ -1,0 +1,444 @@
+Assertions
+
+1. Introduction----------> IMP
+2. use assertion as keyword and identifiers.
+3. Types of assert statement
+4. Various possible run-time flags.
+5. Appropriate and inappropriate use of Assertions
+6. Assertion Error
+
+________________________________________________________________________
+
+Introduction
+_________________
+
+Very common way of debugging is usage of sops statement but the problem with sops is after fixing the bug compulsory we have to delete sop statements otherwise these sop's will be executed at run-time for every request, which creates performance problems and disturbs server log.
+
+To overcome this problem sun people introduced assertions concept in 1.4 version of java.
+
+The main advantage of assertions when compared with sops is after fixing the bug we are not required to remove assert statements because then won't be executed by default at run-time based on our requirement we can enable and disable assertions and by default assertions are disabled.
+
+hence the main objective of assertions is to perform debugging.
+
+Usually we can perform debugging in development and test environment but not in production environment hence Assertions concept applicable for development and test environments but not for production.
+
+____________________________________
+Assert as keyword and identifier
+____________________________________
+
+Assert keyword introduced in 1.4 version hence from 1.4 version onwards we can't use assert as identifier. Otherwise we will get compile time error.
+
+e.g
+
+class Test{
+	public static void main(String[] args){
+		int assert = 10;
+		System.out.println(assert);
+	}
+}
+
+javac Test.java
+
+CE : as of release 1.4, 'assert' is a keyword, and may not be used as an identifier 
+(use -source 1.3 or lower to use 'assert' as an identifier)
+
+javac -source 1.3 Test.java
+
+code compiles fine but with warning.
+
+javac -source 1.3 Test.java	//valid
+
+javac -source 1.4 Test.java	//invalid
+
+javac -source 1.5 Test.java	//invalid
+
+Note : 1. if we are using assert as identifier and if we are trying to compile according to old version (1.3 or lower) then the code compiles fine but with warning.
+
+Note : 2 We can compile a java program according to a particular version by using -source <version> option.
+
+Types of assert statements.
+___________________________
+
+There two types of assert statement 
+
+1. Simple version
+2. Argument version
+
+Simple Version
+_______________
+
+Syntax : assert(b); //b should be boolean type.
+
+if b is true then our assumption satisfied and hence rest of the program will be executed normally.
+
+if b is false then our assumption fails i.e some where something goes wrong and hence the program will be terminated abnormally by rising assertion error. Once we got assertion error we will analyze the code and we can fix the problem.
+
+e.g
+
+class Test{
+	public static void main(String[] args){
+		int x = 10;
+		;;;;;;;;;;;;;;;;;;;;;
+		;;;;;;;;;;;;;;;;;;;;;
+		assert(x > 10);
+		
+		;;;;;;;;;;;;;;;;;;;;;
+		;;;;;;;;;;;;;;;;;;;;;
+		System.out.println(x);
+	}
+}
+
+javac Test.java
+java Test
+output : 
+
+10
+
+java -ea Test
+
+RE : AssertionError : 
+
+Note : by default assert statement won't be executed because assertions are disabled by default. But we can enable assertions by using '-ea' option.
+
+Argumented Version
+__________________
+
+we can argument some description with assertion error by using argumented version
+
+Syntax : 
+
+assert(b):e;		// b should be boolean type, e can be any type but mostly String type
+
+e.g
+
+class Test{
+	public static void main(String[] args){
+		int x = 10;
+		;;;;;;;;;;;;;;;;;;;;;;;;		
+		assert(x > 10):"Hear x value should be > 10 but it is not";
+		;;;;;;;;;;;;;;;;;;;;;;;;
+		System.out.println("value of x is" + x);
+	}
+}
+
+javac Test.java
+
+java Test
+
+o/p : 10
+
+java -ea Test
+
+RE : AssertionError : Hear x value should be > 10 but it is not.
+
+Conclusion 1 : 
+
+
+assert b : e
+
+e will be executed if and only if first argument is false i.e if the first argument is true then second argument won't be evaluated/executed.
+
+e.g
+
+class Test{
+	public static void main(String[] args){
+		int x = 10;
+		assert(x == 10) : ++x		
+		sopln(x);
+	}
+}
+
+javac Test.java
+
+java Test
+
+o/p
+
+10
+
+java -ea Test
+
+o/p
+
+10
+
+conclusion 2 : 
+
+Syntax : assert b : e
+
+for the second argument we can take method call but void return type method call is not allowed. Otherwise we will get compile-time error.
+
+e.g class Test{
+	public static void main(String[] args){
+		int x = 10;
+		assert(x > 10):m1;
+		
+		sopln(x);
+	}
+	
+	public static int m1(){
+	
+		return 777;
+	}
+}
+
+javac Test.java
+
+java Test
+
+10
+
+java -ea Test
+
+AssertionError : 777
+
+if m1() method return type is void then we will get compile time error saying 'void' type not allowed here. 
+
+among 2 versions of assertions it is recommended to use argumented version because it provides more information for debugging.
+
+_________________________________
+Various possible run-time flags
+_________________________________
+
+1. -ea or -enableassertions
+
+To enable assertions in every non-system class (our own classes).
+
+2. -da or -disableassertions
+
+To disable assertions in every non-System class.
+
+3. -esa or -enablesystemassertions
+
+To enable assertions in every system class(pre defined classes)
+
+4. -dsa or disablesystemassertions
+
+To disable assertions in every system class.
+
+we can use above flags simultaneously then JVM will consider these flags from left to right.
+
+e.g -ea -esa -ea -dsa -da -esa -ea -dsa Test
+
+Non system			System
+________________________________________
+
+true				true
+true				false
+false				true
+true				false
+
+
+
+at the end assertions will be enabled in every non-system class and disabled in every system class.
+
+case Study
+_______________
+
+	pack1
+	  |-A class
+	  |
+	  |-B class
+	  |
+	  |
+	  |___pack2
+	  	|
+	  	|---C class
+	  	|
+	  	|---D class
+	  	|
+	  	|
+
+1. To enable assertions only in B class
+
+java -ea:pack1.B
+
+2. To enable assertions in both B and D classes
+
+java -ea:pack1.B -ea:pack1.pack2.D
+
+3. To enable assertions in every class of pack1
+
+java -ea:pack1...
+
+4. To enable assertions in every class of pack1 except B class
+
+java -ea:pack1... -da:pack1.B
+
+5. To enable assertions in every class of pack1 except pack2
+
+java -ea:pack1... -da:pack1.pack2...
+
+Note : we can enable and disable assertions either class wise or package wise also.
+
+___________________________________________________
+Appropriate and inappropriate use of assertions
+___________________________________________________
+
+1. It is always inappropriate to mix programming login with assert statements because there is no guarantee for execution of assert statement always at runtime.
+
+e.g
+
+	appropriate way						in appropriate way
+public void Withdraw(double amt){				public void Withdraw(double amt){	
+	if(amt < 100){							assert(amt > 100):
+		throw new IllegalRequestException();			packed request
+	}else{							}
+		proceed;
+	}
+}
+
+2. while performing debugging in our program if there is any place where the control is not allowed to reach i.e is best place to use assertions.
+
+
+e.g
+       |-----------should be a valid number
+switch(x){
+	case 1 : sop("jan");
+		break;
+	case 2 : sop("Feb");
+		break;
+	case 3 : sop("Mar");
+		break;
+		.
+		.
+		.
+	case 12 : sop("Dec");
+		break;
+	default : 
+		assert(false);--------------> RE : AssertionError
+		
+}
+
+3. It is always in-appropriate for validating public method arguments by using assertions because outside person doesn't aware whether assertions are enabled or disabled in our system.
+
+4. It is always appropriate for validating private method arguments by using assertions because local person can aware whether assertions are enabled or disabled in our system.
+
+5. It is always inappropriate for validating command line arguments by using assertions because these are arguments to main(), which is public.
+
+e.g
+
+class Test{
+	int z = 5;
+	
+	public void m1(int x){
+		assert(x > 10)----->Inappropriate
+		
+		switch(x){
+			case 5:
+				sopln(100);
+				break;
+			case 8:
+				sopln(800);
+				break;
+			.
+			.
+			.
+			default : 
+				assert(false);--->appropriate
+		}
+	}
+	
+	private void m1(){
+		assert(x < 10);------->appropriate
+	}
+	
+	private void m3(){
+		assert(m4());--------------->inappropriate
+	}
+	
+	private boolean m4(){
+		z = 6;
+		return true;
+	}
+}
+
+Assert as a keyword, assert as a identifier
+
+class One{
+	public static void main(String[] args){
+		int assert = 10;
+		sopln(assert);
+	}
+}
+
+class Two{
+	public static void main(String[] args){
+		int x = 10;
+		assert(x>10);
+	}
+}
+
+1. javac -source 1.3 One.java------> compiles fine but with warning
+
+2. javac -source 1.4 One.java------> CE : 
+
+3. javac -source 1.3 Two.java------> CE : 
+
+4. javac -source 1.4 Two.java------> Compiles fine without warning.
+
+class Test{
+	public static void main(String[] args){
+		boolean assertOn = false;
+		
+		assert(assertOn):assertOn = true;
+		
+		if(assertOn){
+			sopln("assertOn");
+		}
+	}
+}
+
+if assertion is not enabled ? 
+
+no o/p
+
+if assertions are enabled?
+
+RE : AssertionError.
+
+
+class Test{
+	public static void main(String[] args){
+		boolean assertOn = true;
+		
+		assert(assertOn):assertOn = false;
+		
+		if(assertOn){
+			sopln("assertOn");
+		}
+	}
+}
+
+if assertion is not enabled ? 
+
+o/p	assertOn
+
+if assertions are enabled?
+
+o/p	assertOn
+
+____________________
+AssertionError
+____________________
+
+It is the child class of error and hence it is unchecked.
+
+If assert statement fails (i.e. argument is false) then we will get assertions error.
+
+even though it is legal to catch assertion error but it's not a good programming practice.
+
+class Test{
+	public static void main(String[] args){
+		int x = 10;
+		
+		try{
+			assert(x>10);
+		}catch(AssertionError e){
+			sopln("It is stupid thing to catch assertionError");
+		}
+		sopln(x);
+	}
+}
+
+in the case of web applications if we run java program in debug mode then automatically assert statements will be executed.

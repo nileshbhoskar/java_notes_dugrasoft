@@ -1,0 +1,643 @@
+1. Introduction
+
+2. Object graph in serialization
+
+3. customized serialization
+
+4. serialization with respect to inheritance
+
+5. Externalization
+
+6. serial version UID
+_____________________________________________
+
+Introduction.
+________________
+
+Serialization 
+______________
+
+The process of writing state of an object to a file is called serialization but strictly speaking it is process of converting an object from java supported form into either file supported form or into network supported form.
+
+By using FileOutputStream and ObjectOutputStream we can implement serialization.
+
+
+Object----------------------->Store to abc.ser file
+	ObjectOutputStream
+
+
+De-serialization
+____________________
+
+The process of reading state of an object from the file is called De-serialization. But strictly speaking it is the process of converting an object form either file supported form or network supported form into java supported form.
+
+By using FileInputStream and ObjectInputStream classes we can implement de-serialization.
+
+Object<-----------------------Store to abc.ser file
+	FileInputStreadm
+	 to read binary data
+
+import java.io.*;
+
+class Dog implements Serializable{
+	int i = 10;
+	int j = 20;
+}
+
+class SerializeDemo{
+	public static void main(String[] args)throws Exception{
+		Dog d1 = new Dog();
+		
+		FileOutputStream fos = new FileOutputStream("abc.ser");-------------|
+		ObjectOutputStream oos = new ObjectOutputStream(fos);		    |----->Serialization
+										    |
+		oos.writeObject(d1);------------------------------------------------|
+		
+		FileInputStream fis = new FileInputStream("abc.ser");---------------|
+		ObjectInputStream ois = new ObjectInputStream(fis);		    |----->De-serialization
+		Dog d2 = (Dog) ois.readObject();------------------------------------|
+		
+		System.out.println(d2.i + "..." + d2.j);
+	}
+}
+
+output:
+
+10 20
+
+
+a1---->	userName = Durga	a2---->	userName = Durga					
+	passwd = software	passwd = null
+		\	       /\
+		 \	       /
+		  \	      /
+		   \	     /
+		    \	    /
+		     \	   /
+		      \	  /
+		      \/ /
+				
+		   userName = Durga
+		    passwd = null
+		    abc.src
+
+
+we can serialize only Serializable objects
+
+an object is said to be serializable if and only if the corresponding class implements serializable interface. Serializable interface present in java.io package and it doesn't contain any methods. It is a marker interface.
+
+If we are trying to serialize a non-serializable object then we will get run-time exception saying NotSerializableException
+
+Transient keyword.
+__________________
+
+Transient modifier applicable only for variables but not for methods and classes.
+
+At the time of serialization if we don't want to save the value of a particular variable to meet security constraints then we should declare that variable as transient.
+
+While performing serialization JVM ignores the original value of transient variable and save default value to the file hence transient means not to serialise. 
+
+
+Transient vs static
+__________________________
+
+static variable is not part of object state and hence it won't participate in serialization due to this declaring static variable as transient there is no use.
+
+final vs transient
+______________________
+Final variables will be participated in serialization directly by the value hence declaring a final variable as transient there is no impact.
+
+declaration			output
+____________________________________________
+
+int i = 10;
+int j = 20;			10.......20
+
+transient int i = 10;		0........20
+int j = 20;
+
+transient static int i = 10;	10.......0
+transient int j = 20;		
+
+transient int i = 10;		0........20
+final transient int j = 20;
+
+transient static int i = 10;	10.......20
+transient final int j = 20;
+
+Note : 
+___________
+
+we can serialize any number of objects to the file but in which order we serialized in the same order only we have to deserialized. i.e order of objects is important in serialization.
+
+e.g
+
+class TestSerialized{
+	public static void main(String[] args){
+		Dog d1 = new Dog();
+		Cat c1 = new Cat();
+		Rat r1 = new Rat();
+		
+		FileOutputStream fos = new FileOutputStream("abc.src");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		
+		oos.writeObject(d1);
+		oos.writeObject(c1);
+		oos.writeObject(r1);
+		
+		FileInputStream fis = new FileInputStream("abc.src");
+		ObjectInputStream ois = new ObjectInputStream(fos);
+		
+		Dog d2 = (Dog) ois.readObject();
+		Cat c2 = (Cat) ois.readObject();
+		Rat r2 = (Rat) ois.readObject();
+	}
+}
+
+
+if we don't know order of object in de-serialization.
+
+
+
+class TestSerialized{
+	public static void main(String[] args){
+		Dog d1 = new Dog();
+		Cat c1 = new Cat();
+		Rat r1 = new Rat();
+		
+		FileOutputStream fos = new FileOutputStream("abc.src");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		
+		oos.writeObject(d1);
+		oos.writeObject(c1);
+		oos.writeObject(r1);
+		
+		FileInputStream fis = new FileInputStream("abc.src");
+		ObjectInputStream ois = new ObjectInputStream(fos);
+		
+		Object o = ois.readObject();
+		
+		if(o instanceof Dog){
+			Dog d2 = new Dog();
+			
+			//perform Dog specific functionality.
+		}else if(o instanceof Cat){
+			Cat d2 = new Cat();
+			
+			//perform Cat specific functionality.
+		}else if(o instanceof Rat){
+			Rat d2 = new Rat();
+			
+			//perform Rat specific functionality.
+		}
+	}
+}
+
+Object graph in serialization
+_________________________________
+
+whenever are serializing an object, the set of all objects which are reachable from that object will be serialized automatically.
+this group of objects is nothing but object Graph.
+
+In Object graph every object should be serializable if atleast one object is not serializable then we will get run-time exception saying NotSerializableException. 	
+
+import java.io.*;
+
+class Dog implements Serializable{
+	Cat c = new Cat();
+}
+
+class Cat implements Serializable{
+	Rat r = new Rat();
+}
+
+class Rat implements Serializable{
+	int j = 0;
+}
+
+
+
+class TestSerialized{
+	public static void main(String[] args){
+		Dog d1 = new Dog();
+		
+		FileOutputStream fos = new FileOutputStream("abc.src");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		
+		oos.writeObject(d1);
+		
+		FileInputStream fis = new FileInputStream("abc.src");
+		ObjectInputStream ois = new ObjectInputStream(fos);
+		
+		Dog d2 = (Dog) ois.readObject();
+		Sysyem.out.println(d2.c.r.j);
+	}
+}
+			
+			 _______________________________________
+			|   ______				|
+			|  |      |				|<------------------object graph
+			|  |  c   |->|   _______     _____	|
+			|  |______|  |->| 	|   |     |	|
+	d1------------->|  		|  r    |-->| j   |	|---------|
+			|		|_______|   |_____|	|	  |
+			|					|	  |
+			|					|	  |
+			|_______________________________________|	  |
+									  |
+									  |
+									  |
+							 ________________\/_____________________	
+							|   ______				|
+							|  |      |				|
+							|  |  c   |->|   _______     _____	|
+							|  |______|  |->| 	|   |     |	|
+					abc.src-------->|  		|  r    |-->| j   |	|
+							|		|_______|   |_____|	|
+							|					|
+							|					|
+							|_______________________________________|
+									  ^
+									  |
+									  |
+									  |
+			 _______________________________________	  |
+			|   ______				|	  |
+			|  |      |				|	  |
+			|  |  c   |->|   _______     _____	|	  |
+			|  |______|  |->| 	|   |     |	|	  |
+	d2------------->|  		|  r    |-->| j   |	|---------|
+			|		|_______|   |_____|	|	  
+			|					|	  
+			|					|	  
+			|_______________________________________|--------->object graph
+									  
+In the above program whenever we are serializing Dog object automatically cat and rat objects got serialized because these are part of object graph of Dog.
+
+Among Dog, Cat and Rat objects if at-least one object is not serializable then we will get run-time exception saying not-serializable.
+
+During default serialization there may be a chance of loss of information because of transient keyword.
+
+e.g
+
+import java.io.*;
+
+class Account implements serialization{
+	String userName = "Durga";
+	transient String passwd = "software";
+	
+}
+
+class CustSerializaedDemo{
+	public static void main(String[] args) throws E{
+		Account a1 = new Account();
+		
+		System.out.println(a.userName + "..." + a1.pwd);
+		FileOutputStream fos = new FileOutputStream("abc.src");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		
+		oos.writeObject(a1);
+		FileInputStream fis = new FileInputStream("abc.src");
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		
+		Account a2 = (Account)ois.readObject();	
+		System.out.println(a2.username + "..." + a2.pwd);
+	}
+}
+
+output : 
+
+Durga Software
+
+Durga null
+
+
+a1---->	userName = Durga					a2---->	userName = Durga					
+	passwd = software					  	passwd = null
+		\					     /
+		   \					/
+		       \			    /
+			    \			/
+				\	    /
+				   \	/
+				
+				userName = Durga
+				passwd = null
+				
+				   abc.src
+
+In the above example before serialization account object can provide proper user name and password but after de-serialization account object can provide only user name but not password. This is due to declaring password variable as transient.
+
+Hence during default serialization there may be a chance of loss of information because of transient keyword to recover this loss of information we should go for customized serialization.
+
+we can implement customized serialization by using the following two methods 
+ _______________________________________________________________________
+|1. private void writeObject(ObjectOutputStream os) throws Exception{}; |
+|_______________________________________________________________________|
+This method will be executed at the time of serialization hence at the time of serialization if we want to perform any activity we have to define that in this method only. 
+
+ _______________________________________________________________________
+|private void readObject(ObjectInputStream is) throws Exception{};	|
+|_______________________________________________________________________|
+
+This method will be executed automatically at the time of de-serialization.
+
+hence at the time of de-serialization if we want to perform any activity we have to define that in this method only.
+
+Note : The above methods are call-back methods because these are executed automatically by the JVM.
+
+2. While performing which object serialization we have to do extra work in the corresponding class we have to define above methods.
+
+e.g. While performing account object serialization if we required to do extra work in the account class we have to define above methods.
+
+import java.io.*;
+class Account implements serialization{
+	String userName = "Durga";
+	transient String passwd = "software";
+	
+	private void WriteObject(ObjectOutputStream oos)throws Exception{
+		
+		oos.defaultWriteObject();
+		---------------------------
+
+		String epwd = "123"+pwd;
+		oos.writeObject(epwd);
+	}
+	
+	private void readObject(ObjectInputStream ois)throws Exception{
+		ois.defaultReadObject();
+		---------------------------
+		
+		String epwd = (String) ois.readObject();
+		epwd = epwd.substring(3);
+		
+	}	
+}
+
+class CustSerializaedDemo{
+	public static void main(String[] args) throws E{
+		Account a1 = new Account();
+		
+		System.out.println(a.userName + "..." + a1.pwd);
+		FileOutputStream fos = new FileOutputStream("abc.src");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		oos.writeObject(a1);
+
+		FileInputStream fis = new FileInputStream("abc.src");
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		
+		Account a2 = (Account)ois.readObject();	
+		System.out.println(a2.username + "..." + a2.pwd);
+	}
+}
+
+
+		userName : Durga
+		password : Anushka
+				\
+				  \
+				    \
+				       \
+					  \
+					     \ 	
+						userName : Durga
+						Password : null
+					      /	
+					    /	
+					  / 	
+					/	
+				      /		
+				    /		
+		userName : Durga
+		Password : null
+
+In above program before serialization and after serialization an account object can provide proper user name and password.
+
+Note : programmer can't call private methods directly from outside of the class but JVM can call private methods directly from outside of the class.
+
+
+e.g 2.
+
+class Account implements serialization{
+	String userName = "Durga";
+	transient String passwd = "software";
+	transient pin = 1234;	
+	private void WriteObject(ObjectOutputStream oos)throws Exception{
+		
+		oos.defaultWriteObject();
+		---------------------------
+
+		String epwd = "123"+pwd;
+		int epin = 4444 + pin;
+		oos.writeObject(epwd);
+		oos.writeInt(epin);
+	}
+	
+	private void readObject(ObjectInputStream ois)throws Exception{
+		ois.defaultReadObject();
+		---------------------------
+		
+		String epwd = (String) ois.readObject();
+		int epin = ois.readInt();
+		pin = epin - 4444;
+		epwd = epwd.substring(3);
+		
+	}	
+}
+
+class CustSerializaedDemo{
+	public static void main(String[] args) throws E{
+		Account a1 = new Account();
+		
+		System.out.println(a.userName + "..." + a1.pwd + "..." + a1.pin);
+		FileOutputStream fos = new FileOutputStream("abc.src");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		oos.writeObject(a1);
+
+		FileInputStream fis = new FileInputStream("abc.src");
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		
+		Account a2 = (Account)ois.readObject();	
+		System.out.println(a2.username + "..." + a2.pwd + "..." + a1.pin);
+	}
+}
+
+
+		userName : Durga
+		password : Anushka
+		pin	: 1234
+				\
+				  \oos.writeObject()
+				    \
+				       \
+					  \
+					     \ 	
+						userName : Durga
+						Password : 123Anushka
+						pin : 5678
+					      /	
+					    /	
+					  / 	
+					/ois.readObject()	
+				      /		
+				    /		
+		userName : Durga
+		Password : Anushka
+		pin : 1234
+
+
+Serialization with respect to inheritance
+___________________________________________
+
+1. Even though child class doesn't implement serializable we can serialize child class object if parent class implements serializable interface i.e. serializable nature is inheriting from parent to child hence if parent is serializable then by default every child is serializable.
+
+import java.io.*;
+
+class Animal implements Serializable{
+	int i = 10;
+}
+
+class Dog extends Animal{
+
+	int j = 20;
+	
+}
+
+class CustSerializeDemoInher {
+	public static void main(String[] args){
+		Dog g1 = new Dog();
+		System.out.println(g1.i + "....." + g1.j);
+		
+		FileOutputStream fos = new FileOutputStream("abc.src");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		
+		oos.writeObject(d1);
+		
+		FileInputStream fis = new FileInputStream("abc.src");
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		
+		Dog d2 = oos.readObject(d1);
+		System.out.println(d2.i + "..." d2.j);
+	}
+}
+
+	d1---->	i : 10
+		j : 20
+				\
+				  \oos.writeObject()
+				    \
+				       \
+					  \
+					     \ 	
+						i : 10
+						j : 20---->abc.src
+					      /	
+					    /	
+					  / 	
+					/ois.readObject()	
+				      /		
+				    /		
+	d2--->	i : 10
+		j : 20
+
+in the above example dog class doesn't implement serializable we can serialize because its parent animal class implements serializable.
+
+Note : Object class doesn't implement serializable interface.
+
+even though parent class doesn't implement serializable we can serialize child class object if child class implements serializable interface i.e. to serialize child class object parent class need not be serializable.
+
+2. At the time of serialization JVM will check is any variable inheriting from non-serializable parent or not if any variable inheriting from non-serializable parent then JVM ignores original value and save default value to the file.
+
+3. At the time of de-serialization JVM will check is any parent class non-serializable or not if any parent class is non-serializable then JVM will execute instance control flow and it's instance variable to the current object.
+
+4. While executing instance control flow of non-serializable parent JVM will always call no-argument constructor. Hence every non-serializable class should compulsory contain no-argument constructor. It may be default constructor generated by compiler or customized constructor explicitly provided by programmer otherwise we will get Runtime exception saying InvalidClassException.
+
+
+class Animal{
+	int i = 10;
+	Animal(){
+		System.out.println("animal-constructor called");
+	}
+}
+
+class Dog extends Animal implements Serializable{
+
+	int j = 20;
+	Dog(){
+		System.out.println("dog-constructor called");
+	}
+	
+}
+
+class CustSerializeDemoInher {
+	public static void main(String[] args){
+		Dog d1 = new Dog();
+		d1.i = 888;
+		d1.j = 999;
+		
+		FileOutputStream fos = new FileOutputStream("abc.src");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		
+		oos.writeObject(d1);
+		System.out.println("De-serializing start");
+		FileInputStream fis = new FileInputStream("abc.src");
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		
+		Dog d2 = oos.readObject(d1);
+		System.out.println(d2.i + "..." d2.j);
+	}
+}
+
+output : 
+
+animal constructor called
+dog constructor called
+De-serializing start
+animal constructor called
+10...999
+
+	d1---->	i : 10
+		j : 20
+				\
+				  \oos.writeObject()
+				    \
+				       \
+					  \
+					     \ 	
+						i : 0
+						j : 20---->abc.src
+					      /	
+					    /	
+					  / 	
+					/ois.readObject()	
+				      /		
+				    /		
+	d2--->	i : 0
+		j : 20
+
+Note : Every parent class of serializable class should compulsory contain no-argument constructor.
+
+Externalization
+________________
+
+in serialization every thing takes care by JVM and programmer doesn't have any control 
+
+in serialization it is always possible to save total object to the file and it is not possible to save part of the object, which may creates performance problems to overcome this problem we should go for externalization. The main advantage of externalization over serialization is every thing takes care by programmer and JVM doesn't have any control. Based on our requirement we can save either total object or part of the object, which improves performance of the system.
+
+To provide externalizable ability for any java Object compulsory the corresponding class should implement externalizable interface 
+
+externalizable interface definex two methods 1. writeExternal() 
+					     2. readExternal().
+					     
+Externalizable interface is child interface of Serializable interface
+
+Serializable-------->1.1
+      |
+      |
+      |
+      |
+      |	       |------------->writeExternal()
+Externalization|------->1.1
+	       |------------->readExternal()
+
+

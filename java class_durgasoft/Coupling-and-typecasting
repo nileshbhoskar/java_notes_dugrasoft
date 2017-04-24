@@ -1,0 +1,334 @@
+_____________
+Coupling
+_____________
+
+The degree of dependency of components is called coupling. if dependency is more then it is considered as tightly coupling and if dependency is less then it is considered as loosly coupling.
+
+e.g
+
+class A{
+	static int a = B.j;
+}
+
+class B{
+	static int j = C.k;
+}
+
+class C{
+	static int k = D.m1();
+}
+
+class D{
+	public static int m1(){
+		return 10;
+	}
+}
+
+
+The above components are said to be tightly coupled with each other because dependency between the components is more 
+
+Tightly coupling is not a good programming practice because it has several serious disadvantages.
+
+1. without affecting remaining components we can't modify any component and hence enhancement will become difficult.
+2. it suppresses re-usability.
+3. it reduces maintainability of the application.
+4. hence we have to maintain dependency between components as less as possible i.e. loosely coupling is good programming practice.
+
+_____________
+Cohesion
+_____________
+
+For every component a clear well defined functionality is required then that component is said to be follow high cohesion
+
+
+low cohesion
+______________
+
+Total Servlet
+
+login page display
+
+validation logic
+
+display in-box page
+
+display compose page
+
+display error page
+
+	.
+	.
+	.
+	.
+	.
+	.
+
+
+
+High cohesion
+________________
+
+login page----->validate servlet----------->if success--------------> inbox.jsp
+					|
+					|
+					| not success
+					|
+				    error.jsp
+
+
+High cohesion is always good programming practice because it has several advantages 
+1. without affecting remaining components we can modify any component hence enhancement will become easy 
+2. it promotes re-usability of the code(wherever validation is required we can reuse the same validation servlet without rewriting).
+3. it improves maintainability of the application.
+
+Note : loosely coupling and high cohesion are good programming practices 
+
+_____________________
+Object typecasting
+_____________________
+
+we can use parent reference to hold child object.
+
+e.g Object o = new String("Test");
+
+we can use interface reference to hold implemented class object.
+
+e.g Runnable r = new Thread();
+
+
+A		b	=	(C)		d;
+|		|		 |		|
+|		|		 |		|
+|		|		 |		|
+|		|		 |		|
+class|		Name	      class|	     Reference
+interface	of	      Interface	     variable
+name		reference     Name	     Name
+		variable
+
+
+Mantra 1:(compile time checking 1)
+
+The type of 'd' and 'c' must have some relation either child to parent or parent to child or same type otherwise we will get compile time error
+saying inconvertable types found 'd' type required 'c'.
+
+e.g 1. valid
+
+Object o = new String("Test");
+
+StringBuffer sb = (StringBuffer) o;
+
+e.g 2. invalid
+
+String s = new String("Test");
+
+StringBuffer sb = (StringBuffer) s;
+
+CE: inconvertableTypes found java.lang.String required java.lang.StringBuffer
+
+Mantra 2:(compile time checking 2)
+
+'C' must be either same or derived type of 'A' otherwise we will get compile time error saying incompatible types found : C required : A
+
+e.g 1.
+
+Object o = new String("Test");
+
+StringBuffer sb = (StringBuffer) o;
+
+e.g 2.
+
+Object o = new String("Test");
+
+StringBuffer sb = (String) o;
+
+CE: incompatible types found : java.lang.String required : java.lang.StringBuffer
+
+
+Mantra 3 : (runtime checking)
+
+Runtime object type of 'd' must be either same or derived type of 'c'  otherwise we will get runtime exception saying ClassCastException
+
+e.g 1
+
+Object o = new String("Test");
+
+StringBuffer sb = (StringBuffer) o;
+
+RE: ClassCastException : java.lang.String cannot be cast to java.lang.StringBuffer
+
+e.g 2
+
+Object o = new String("Test");
+
+String sb = (String) o;
+
+valid
+
+e.g				     |-------------derived 1 
+				     |
+	 |--------------base1--------|
+	 |			     |
+	 |			     |-------------derived 2
+Object---|
+	 |			     |-------------derived 3
+	 |			     |
+	 |--------------base2--------|
+				     |
+				     |-------------derived 4
+
+Base2 b = new Derived4();
+
+a. Object o = (Base2) b;		//valid
+b. Object o = (Base1) b;		//invalid CE: inconvertable type found: Base2 required : Base1
+c. Object o = (Derived3) b;		//invalid CE: ClassCastException
+d. Base2 b1 = (Base1) b;		//invalid CE: inconvertable type found: Base2 required : Base1
+e. Base1 b1 = (Derived4) b;		//invalid CE: incompatable type found: Derived4 required : Base1
+f. Base1 b1 = (Derived1);		//invalid CE: inconvertable type found: Base2 required : Derived 1.
+
+Strictly speaking throw type casting we are not creating any new object.
+For the existing object we are providing another type of reference variable i.e we are performing type casting but not object casting.
+
+e.g 1.
+String s = new String("Test");
+
+Object o = (Object) s;
+
+e.g 2.
+
+Integer i = new Integer(10);----------|------------------------------------|
+				      |------Number n = new Integer(10);   |
+Number n = (Number) i; ---------------|------------------------------------|------------Object o = new Integer(10);
+									   |
+Object o = (Object) n;-----------------------------------------------------|
+
+sopln(i == n);
+sopln(n == o);
+
+
+Integer i-----------|
+		    |
+Number n------------|-------->10
+		    |
+Object o------------|
+
+
+				A
+Note : 				/\
+				|
+C c = new C();			|
+				|
+B b = new C();<--(B)c		|
+				B
+				/\
+				|
+A a = new C();<--(A)((B)c)	|
+				|
+				|
+				C
+
+
+e.g 1.
+
+class P{
+	public void m1(){}
+}
+
+class C extends P{
+	public void m2(){}
+}
+
+C c = new C();
+
+c.m1();		//valid
+
+c.m2();		//valid
+
+((p)c).m1();	//valid
+
+((p)c).m2();	//invalid Reason. parent reference can be used to hold child object but by using that reference we can't call child specific methods and we can call only the methods available in parent class.
+
+e.g 2.
+
+class A{
+	public void m1(){
+		System.out.println('A');
+	}
+}
+
+class B extends A{
+	public void m1(){
+		System.out.println('B');
+	}
+}
+
+class C extends B{
+	public void m1(){
+		System.out.println('C');
+	}
+}
+
+
+C c = new C();		//	C
+
+((B) c).m1(); 		//	C
+
+((A)((B) c)).m1();	//	C
+
+
+It is overriding and method resolution is always based on runtime object type.
+
+e.g 3.
+class A{
+	public static void m1(){
+		System.out.println('A');
+	}
+}
+
+class B extends A{
+	public static void m1(){
+		System.out.println('B');
+	}
+}
+
+class C extends B{
+	public static void m1(){
+		System.out.println('C');
+	}
+}
+
+
+C c = new C();		//	C
+
+((B) c).m1(); 		//	B
+
+((A)((B) c)).m1();	//	A
+
+It is method hiding and method resolution is always based on reference type.
+
+e.g 4
+
+class A{
+	int x = 777;
+}
+
+class B extends A{
+	int x = 888;
+}
+
+class C extends B{
+	int x = 999;
+}
+
+
+C c = new C();		
+
+sopln(c.x)		//	999
+
+sopln(((B) c).x); 	//	888
+
+sopln(((A)((B) c)).x);	//	777
+
+variable resolution is always based on reference type but not based on run-time object.
+
+

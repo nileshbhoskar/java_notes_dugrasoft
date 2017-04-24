@@ -1,0 +1,90 @@
+The arguments which are passing from command prompt are called command line arguments with these command line arguments JVM will create an array and by passing that array as argument jvm will call main method 
+
+e.g
+
+java Test a b c
+
+args[0]----->a
+args[0]----->b
+args[0]----->c
+
+args.length------>3
+
+The main objective of command line arguments is we can customize behaviour of the main method. 
+
+e.g 1
+
+class Test{
+	public static void main(String[] args){
+		for(int i = 0; i <= args.length; i++){
+			sopln(args[i]);
+		}
+	}
+}
+
+outptu:
+java Test a b c
+a b c
+RE: AIOOB
+
+java Test a b
+a b
+RE : AIOOB
+
+java Test
+
+RE : AIOOB
+
+if we replace <= with < then we won't get any runtime exception
+
+class Test{
+	public static void main(String[] args){
+		String[] argh = new String{"x","y","z"};	
+		for(int i = 0; i < args.length; i++){
+			sopln(args[i]);
+		}
+	}
+}
+
+outptu:
+java Test a b c
+x y z
+
+java Test a b
+x y z
+
+java Test
+
+x y z
+
+wthin main method command line arguments are available in String form 
+
+class Test{
+	public static void main(String[] args){
+		sopln(args[0]+args[1]);
+	}
+}
+
+output:
+java Test 10 20
+
+o/p : 1020
+
+usually space itself is the seprator between command line arguments if our command line argument itself contains space then we have to enclose that command line argument within double codes("") 
+
+class Test{
+	public static void main(String[] args){
+		sopln(args[0]);
+	}
+}
+
+
+output:
+
+java Test Note book
+
+o/p Note
+
+java Test "Note book"
+
+o/p Note book

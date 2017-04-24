@@ -1,0 +1,1007 @@
+Wrapper classes
+_________________
+
+The main objectives of wrapper classes are 
+
+1. to wrap primitive into object forms so that we can handle primitives also just like objects.
+2. To define several utility methods which are required for primitives.
+
+Constructors 
+_____________
+
+Almost all wrapper classes contains two constructors. one can take corresponding primitive as argument and the other can take String as argument.
+
+e.g 1. Integer i = new Integer(10);
+
+2. Integer i = new Integer("10");
+3. Double d = new Double(10.5);
+4. Double d = new Double("10.5");
+
+if String argument not representing a number then we will get runtime exception saying NumberFormatException.
+
+
+e.g Integer i = new Integer("TEN"); // RE : NumberFormatException
+
+Float class contains three constructor with float, double and String arguments.
+
+e.g
+
+Float f = new Float(10.5f);
+Float f = new Float("10.5f");
+Float f = new Float(10.5);
+Float f = new Float("10.5f");
+
+Character class contains only one constructor which can take char argument.
+
+Character ch = new Character('a');
+
+Character ch = new Character("a");	//CE : Incomputable type String can not be converted to character 
+
+Boolean class contains two constructors one can take primitive as argument and other can take String argument.
+
+if we pass boolean primitive as argument the only allowed values are true or false where case is important and content is also important.
+
+e.g. Boolean b = new Boolean(true);	//valid
+Boolean b = new Boolean(false);		//valid
+Boolean b = new Boolean(True);		//invalid
+Boolean b = new Boolean(test);		//invalid
+
+if we are passing String type as argument then case and content both are not important 
+if the content is case insensitive String of true then it is treated as true otherwise it is treated as false.
+
+e.g
+
+Boolean b = new Boolean("true");---->true
+Boolean b = new Boolean("True");---->true
+Boolean b = new Boolean("TRUE");---->true
+Boolean b = new Boolean("malaika");---->false
+Boolean b = new Boolean("testing");---->false
+Boolean b = new Boolean("anything");---->false
+
+e.g
+Boolean x = new Boolean("yes");
+Boolean y = new Boolean("no");
+System.out.println(x);		//false
+System.out.println(y);		//false
+System.out.println(x.equals(y));//true
+_____________________________________________________________________________________________________
+Wrapper class					Corresponding constructor arguments
+_____________________________________________________________________________________________________
+
+Byte			byte or String
+Short			short or String
+Integer			int or String
+Long			long or String
+* Float			float or double or String
+Double			double or String
+* Character 		char
+* Boolean		boolean or String
+
+_______________________________________________________________________________________________________
+
+Note : in all wrapper classes toString() method is overridden to return content directly.
+       in all wrapper classes equals() method is overridden for content comparison.
+       
+Utility methods.
+_________________
+
+1. valueOf()
+2. xxxValue()
+3. parseXXX()
+4. toString()
+
+1. valueOf() : 
+
+we can use valueOf() methods to create wrapper object for the given primitive or String 
+
+Form 1: Every wrapper class except character class contains a static valueOf() method to create wrapper object for the given string.
+
+public static wrapper valueOf(String s);
+
+e.g Integer i = new Integer.valueOf("10");	//10
+e.g Double d = new Double.valueOf("10.5");	//10.5
+e.g Boolean b = new Boolean.valueOf("Durga"); 	//false
+
+form 2: Every integral type wrapper class (byte, short, integer, long) contains the following valueOf() method to create wrapper object for the given specified radix string
+
+public static wrapper valueOf(String x, int radix);
+
+the allowed range of radix is 2 to 36.
+
+e.g Integer i = Integer.valueOf("100", 2);
+
+sopln(i);	//4
+
+e.g Integer i = Integer.valueOf("101", 2);
+
+sopln(i);	//17
+
+Form 3 : Every wrapper class including character class contains a static valueOf() method to create wrapper object for the given primitive.
+
+public static wrapper valueOf(premitive p);
+
+e.g.
+Integer i = Integer.valueOf(10);
+
+Character ch = Character.valueOf('a');
+Boolean b = Boolean.valueOf(true);
+
+
+
+			valueOf()
+premitive or String -------------------------> wrapper object
+
+xxxValue()
+____________
+
+we can use xxxValue() methods to get premitive for the given wrapper object. 
+
+Every number type wrapper class (byte, short, integer, long, float, double) contain the following 6 methods to get primitive for the given wrapper objects.
+
+public byte byteValue();
+public short shortValue();
+public int intValue();
+public long longValue();
+public float floatValue();
+public double doubleValue();
+
+e.g
+
+Integer i = new Integer(130);
+
+sopln(i.byteValue());	//	-126
+sopln(i.shortValue());	//	130
+sopln(i.intValue());	//	130
+sopln(i.longValue());	//	130
+sopln(i.floatValue());	//	130.0
+sopln(i.doubleValue());	//	130.0
+
+charValue()
+____________
+
+Character class contains charValue() method to get char primitive for the given character object.
+
+public char charValue();
+________________________
+
+e.g Character ch = new Character('a');
+char c = ch.charValue();
+System.out.println(c);	//'a'
+
+booleanValue() method
+______________________
+
+boolean class contains booleanValue() method to get boolean primitive for the given boolean object.
+
+public boolean booleanValue()
+
+e.g
+
+Boolean b = Boolean.valueOf("Durga");	//false
+boolean b1 = b.booleanValue();
+
+sopln(b1);	//false
+
+
+Note : in total 38(= 6 * 6 + 1 + 1) xxxValue() value methods are possible. 
+
+			xxxValue()
+wrapper object------------------------------------->primitive
+
+parseXXX():
+______________
+
+we can use parseXXX() methods to convert String to primitive.
+
+Form 1: every wrapper class except character class contains the following parseXXX() method to find primitive for the given string object
+
+public static primitive parseXXX(String s)
+
+e.g
+
+int i = Integer.parseInt("10");
+double d = Double.parseDouble("10.5");
+Boolean b = Boolean.parseBoolean("true");
+
+Form 2 : every integral type wrapper class (byte, short, integer, long) contains the following parseXXX() method to convert specified radix string to primitive.
+
+public String parseXXX(String s,int radix)
+the allowed range of radix is 2 to 36.
+
+e.g int i = Integer.parseInt("1111");
+
+sopln(i);	//15
+
+
+		parseXXX()
+String -----------------------------> premitive
+
+
+toString()
+______________
+we can use toString() method to convert wrapper object or primitive to String.
+
+Form 1 : every wrapper class contains the following toString() method to convert wrapper object to String type.
+
+public String toString()
+
+it is the overriding version of Object class toString().
+
+whenever we are trying to print wrapper object reference internally this toString() method will be called.
+
+e.g Integer i = new Integer(10).
+
+String s = i.toString();
+
+sopln(s);	//10
+
+Form 2 : every wrapper class including character class contains the following static toString() method to convert primitive to String
+
+public static String toString(primitive p)
+
+e.g
+
+String s = Integer.toString(10);
+String s = Boolean.toString(true);
+String s = Character.toString('a');
+
+Form 3 : Integer and Long classes contains the following toString() method to convert primitive to specified radix string.
+
+public static String toString(premitive p, int radix)
+
+the allowed range of radix is 2 to 36.
+
+String s = Integer.toString(15,2);
+
+sopln(s); //1111
+
+Form 4 : toXXXString() methods
+
+integer and long classes contains the following toXXXString() methods.
+
+public static String toBinaryString(premitive p)
+public static String toOctalString(premitive p)
+public static String toHexString(premitive p)
+
+e.g
+String s = Integer.toBinaryString(10);
+System.out.println(s);	//1010
+
+String s = Integer.toOctalString(10);
+System.out.println(s);	//12
+
+String s = Integer.toHexString(10);
+System.out.println(s);	//a
+				toString()
+wrapper object/primitive------------------------------------>String
+
+
+Dancing between String, wrapper object and primitive.
+______________________________________________________
+
+				String
+				  /\
+				 /  \
+				/    \
+			       /      \
+		toString()    /	       \toString()
+		valueOf()    /	 	\parseXXX()
+			    /		 \
+			   /		  \
+			  /    	 	   \
+		       wrapper----------primitive	 
+		       object 		 value
+		       		XXXValue()
+		       		valueOf()
+		       		
+partial hierarchy of java.lang package
+_________________________________________
+							object
+							   |
+	---------------------------------------------------------------------------------------------------------
+	|		|		|		|		|		|		|
+	|		|		|		|		|		|		|
+	|		|		|		|		|		|		|
+     String	  StringBuffer    StringBuilder		|	     Boolean         Character        Void	......
+     							|
+     							|
+     						      Number
+     						        |
+	 		--------------------------------------------------------------------------------	
+	 		|		|		|		|		|		|
+	 		|		|		|		|		|		|
+	 	      Byte            Short	     Integer	       Long           Float	      Double
+	 	      
+
+Conclusions
+______________
+
+The wrapper classes which are not child class of Number are
+
+Boolean and character
+
+the wrapper classes which are not direct child class of Object are
+
+Byte, Short, Integer, Long, Float, Double.
+
+String, StringBuffer, StringBuilder and all wrapper classes are final classes.
+							       -----	
+in addition to String object all wrapper class objects also immutable in java.
+
+some times Void class is also considered as wrapper class.
+
+_______________
+Void class
+_______________
+
+It is a final class and it is the direct child class of Object 
+
+it doesn't contain any methods and it contains only one variable Void.TYPE
+
+In general we can use void class in reflections to check whether the method return type is void or not.
+
+if(getMethod(m1).getReturnType() == Void.TYPE){
+
+}
+
+Void is the class representation of void keyword in Java.
+
+__________________________
+Autoboxing
+__________________________
+
+automatic conversion of primitive to wrapper object by compiler is called autoboxing.
+
+e.g Integer i = 10; // compiler converts int to Integer automatically by autoBoxing.
+
+after compilation the above line will become Integer i = Integer.valueOf(10);
+
+i.e internally autoboxing concept is implemented by using value of methods.
+
+Integer i = Integer.valueOf(10);
+
+autounboxing 
+______________
+
+Automatic conversion of wrapper object to primitive by compiler is called autounboxing.
+
+Integer I = new Integer(10);
+
+int i = I;
+
+compiler converts Integer to int automatically by autounboxing.
+
+after compilation the above line will become 
+
+int i = I.intValue()
+
+i.e internally autounboxing concept is implemented by using xxxValue() method.
+
+			Autoboxing (valueOf())
+premitive value--------------------------------------> wrapper object
+	        <--------------------------------------
+			autounboxing(xxxValue())
+			
+class Test{
+	Static Integer I = 10;------------------------->autoboxing
+	
+	public static void main(String[] args){
+		int i = I;------------------------->autounboxing
+		sopln(i);------------------------->autoboxing
+	}
+	
+	public static void m1(Integer k){------------------------->autoboxing
+		int m = k------------------------->autounboxing
+		sopln(m);
+	}
+}
+
+
+if we compile this program using 1.4 code then we will get 4 compile time errors
+
+javac -version 1.4 Test.java
+
+Above code is valid in 1.5 version but invalid in 1.4 version
+
+Note : just because of autoboxing and autounboxing we can use primitives and wrapper objects interchangeably from 1.5 version onwards.
+
+
+class Test{						|	class Test{
+	static Integer I = 10;				|		static Integer I;
+							|	
+	public static void main(String[] args){		|		public static void main(String[] args){
+		int m = I;				|			int m = I;
+							|
+		sopln(m); //10				|			sopln(m);	// RE : NPE
+	}						|		}
+}							|	}
+
+
+on null reference if we are trying to perform autounboxing then we will get runtime exception saying NullPointerException.
+
+e.g 3. 
+
+Integer x = 10;
+Integer y = x;
+
+x++;
+
+sopln(x);	//11
+sopln(y);	//10
+
+sopln(x==y)	//false
+
+Note : All wrapper class objects are immutable i.e once we creates a wrapper class object we can't perform any changes in that object.
+
+if we are trying to perform any change with those changes a new Object will be created.
+
+1.
+Integer x1 = new Integer(10);			
+Integer y1 = new Integer(10);			
+
+System.out.println(x1 == y1);	//false		
+2.		
+Integer x2 = new Integer(10);
+Integer y2 = 10;
+
+System.out.println(x2 == y2);	//false
+3.		
+Integer x3 = 10;
+Integer y3 = 10;
+
+System.out.println(x3 == y3);	//true
+4.	
+Integer x4 = 100;
+Integer y4 = 100;
+		
+System.out.println(x4 == y4);	//true
+5.		
+Integer x5 = 1000;
+Integer y5 = 1000;
+		
+System.out.println(x5 == y5);	//false
+
+
+conclusion : internally to provide support for autoboxing a buffer of wrapper objects will be created at the time of wrapper class loading.
+by autoboxing if an object is required to create.
+
+first JVM will check whether this object already present in the buffer or not. If it is already present in the buffer then existing buffer object will be used. If it is not already available in the buffer then JVM will create a new Object.
+
+class Integer{
+	static{
+		-128	-127	...	...	...	126	127
+	}
+}
+
+but buffer concept is available only in the following ranges.
+
+Byte---------->always
+Short---------->-128 to +127
+Integer---------->-128 to +127
+Long---------->-128 to +127
+Character---------->-128 to +127
+Boolean---------->always
+
+except this range in all remaining cases a new Object will be created.
+
+Integer x = 127;		Integer x = 128;		Boolean x = false;		Double x = 127;
+Integer y = 127;		Integer x = 128;		Boolean x = false;		Double x = 127;
+
+sopln(x == y);	//true		sopln(x == y);	//false		sopln(x == y);	//true		sopln(x == y);	//false
+
+Internally auto boxing concept is implemented by using valueOf() methods hence buffering concept is applicable for value of methods also.
+
+Integer x = new Integer(10);		Integer x = 10;			Integer x = Integer.valueOf(10);	Integer x = 10;
+Integer y = new Integer(10);		Integer y = 10;			Integer y = Integer.valueOf(10);	Integer y = Integer.valueOf(10);
+
+sopln(x==y);//false			sopln(x==y);//true		sopln(x==y);//true			sopln(x==y);//true
+
+
+____________________________________________________________________
+overloading with respect to Autoboxing, widening, var-arg methods
+____________________________________________________________________
+
+Case 1 : autoboxing vs widening
+_________________________________
+
+e.g
+
+class Test{
+	public static void m1(Integer i){
+		sopln("autoboxing");
+	}
+	public static void m1(long l){
+		sopln("widening");
+	}
+	public static void main(String[] args){
+		int n = 10;
+		m1(n);
+	}
+}
+
+output : 
+
+widening 
+
+widening dominates autoboxing.
+
+case 2 : widening vs var-arg methods
+_____________________________________
+
+
+e.g
+
+class Test{
+	public static void m1(int... i){
+		sopln("autoboxing");
+	}
+	public static void m1(long l){
+		sopln("widening");
+	}
+	public static void main(String[] args){
+		int n = 10;
+		m1(n);
+	}
+	
+}
+
+output : 
+
+widening 
+
+widening dominates var-args methods.
+
+case 3 : autoboxing vs var-arg methods
+________________________________________
+
+e.g .
+
+class Test{
+	public static void m1(int... i){
+		sopln("var-arg");
+	}
+	public static void m1(Integer i){
+		sopln("autoboxing");
+	}
+	public static void main(String[] args){
+		int n = 10;
+		m1(n);
+	}
+	
+}
+
+output : 
+
+autoboxing
+
+autoboxing dominates var-args methods.
+
+
+in general var-arg methods will get least priority.
+
+i.e if no other method matched then only var-arg methods will get chance.
+
+it is exactly same as default case inside switch.
+
+*** Note : while resolving overloaded methods compiler will always gives precedence in following order.
+
+1. widening 
+2. autoboxing
+3. var-arg() methods
+
+case 4 : 
+__________________
+
+e.g .
+
+class Test{
+	public static void m1(Long l){
+		sopln("autoboxing");
+	}
+	public static void main(String[] args){
+		int n = 10;
+		m1(n);	---------------------->//CE : can not be applied to int.
+	}
+	
+}
+
+output : 
+
+autoboxing
+					not allowed
+			widening-------------------------------->autoboxing
+			autoboxing------------------------------>widening
+					allowed
+					
+Widening followed by autoboxing is not allowed in java where as autoboxing followed by widening is allowed.
+
+
+Long l = 10;	//CE : incompatible types found int required java.lang.*;
+
+long l = 10; 	//valid by widening concept.
+
+class Test{
+	public static void m1(Object o){
+		sopln("object version");
+	}
+	public static void main(String[] args){
+		int n = 10;
+		m1(n);
+	}
+}
+
+output : 
+__________
+
+object version
+	autoboxing		widening
+int ----------------->Integer----------------------->Object
+
+class Test{
+	public static void m1(Number n){
+		sopln("Number version");
+	}
+	public static void main(String[] args){
+		int n = 10;
+		m1(n);
+	}
+}
+
+output : 
+__________
+
+Number version
+	autoboxing		widening
+int ----------------->Integer----------------------->Number
+
+which of the following assignments are legal.
+
+int i = 10;		//valid
+Integer i = 10;		//valid autoboxing
+int i = 10L;		//invalid CE : possible loss of precision found long required int	
+long l = 10L;		// valid
+long l = 10;		//valid widening
+Long l = 10L;		//valid autoboxing
+Long l = 10;		//invalid CE: found int required Long
+Object o = 10;		//valid (autoboxing------>widening)
+Double d = 10;		//valid (widening)
+double d = 10;		//invalid (CE : incompatible types found int required double)
+Number n = 10;		//valid (autoboxing------>widening)		
+
+____________________________________________
+Relation between == operator and .equals()
+____________________________________________
+
+if two objects are equal by '==' operator then these objects are always equal by .equals() method i.e if r1 == r2 is true then r1.equals(r2) is always true.
+
+if two objects are not equal by '==' operator then we can't conclude any thing about .equals() method it may returns true or false.
+i.e. if r1 == r2 is false then r1.equals(r2) may returns true or false and we can't expect exactly.
+
+if two objects are equal by .equals() method then we can't conclude any thing about '==' operator it may returns true or false.
+
+i.e if r1.equals(r2) is true then we can't conclude any thing about r1 == r2.
+
+if two objects are not equal by .equals() method then these objects are always not equal by == operator.
+
+i.e if r1.equals(r2) is false then r1 == r2 is always false.
+
+differences between == operator and .equals() method.
+
+to use == operator compulsory there should be some relation between argument types (either child to parent or parent to child or same type) otherwise we will get compile time error saying incomparable types.
+
+if there is no relations between argument types then .equals() method won't rise any compile-time or runtime errors simply it returns false.
+
+String s1 = new String("testing");
+String s2 = new String("testing");
+StringBuffer sb1 = new StringBuffer("testing");
+StringBuffer sb2 = new StringBuffer("testing");
+
+sopln(s1 == s2);	//false
+sopln(s1.equals(s2));	//true
+sopln(sb1 == sb2);	//false
+sopln(sb1.equals(s2));	//false
+sopln(s1 == sb2);	//CE : incomparable types : found : java.lang.String required : java.lang.StringBuffer
+sopln(s1.equals(s2));	//false
+
+_____________________________________________________________________________________________
+	==				.equals() method
+_____________________________________________________________________________________________
+
+1. it is an operator in Java		1. it is a method applicable only
+applicable for both primitives		   for object types but not for
+and object types.			   primitives.
+
+2. in the case of object references	2. by default .equals() method present
+== operator made for reference 		   in object class also made for reference
+comparison(address comparison).		   comparison.
+
+3. we can't override == operator	3. we can override .equals() method for 
+for content comparison.			   content comparison.
+
+4. to use '==' operator compulsory	4. if there is no relation between argument	
+there should be some relation between	   types then .equals() method won't rise
+argument types(either child to parent	   any compile time or runtime errors and
+or parent to child or same type)	   simply returns false.
+otherwise we will get compile time
+error saying incomparable types.
+
+_____________________________________________________________________________________________
+
+answer is one line :
+____________________
+in general we can use '==' operator for reference comparison and .equals() method for content comparison.
+
+Note : for any object reference r,
+
+r == null;
+r.equals(null);
+
+always returns false.
+
+e.g Thread t = new Thread()
+
+sopln(t == null);	//false
+sopln(t.equals(null));	//false
+
+Note : hashing related data structures follow the following fundamental rule.
+two equivalent objects should be placed in same bucket. But all objects present in the same bucket need not be equal.
+
+contract between .equals() method and hashCode() between.
+___________________________________________________________
+
+if two objects are equal by .equals() method then there hashCodes() must be equal. i.e two equivalent objects should have same hashCode().
+
+i.e. if r1.equals(r2) is true. then r1.hashCode() == r2.hashCode() is always true.
+
+object class .equals() method and hashCode() method follows above contract hence whenever we are overriding .equals() method compulsory we should override hashCode() method to satisfy above contract.
+
+i.e two equivalent objects should have same hash code.
+
+if two objects are not equal by .equals() method then there is no restriction on hashCodes may be equal or may not be equal.
+
+if hash codes of two objects are equal then we can't conclude any thing about .equals() method it may returns true or false.
+
+if hash codes of two objects are not equal then these objects are always not equal by .equals().
+
+***Note : to satisfy contract between equals and hashCode() methods whenever we are overriding .equals() method compulsory we have to override hashCode() method. Otherwise we won't get any compile time or runtime errors but it is not a good programming practice.
+
+in string class .equals() method is overridden for content comparison and hence hashCode() method is also overridden to generate hashCode() based on content.
+
+String s1 = new String("Durga");
+String s2 = new String("Durga");
+sopln(s1.equals(s2));				//true
+sopln("Hashcode of s1 : " + s1.hashCode());	//true
+sopln("Hashcode of s2 : " + s2.hashCode());	//true
+
+
+in StringBuffer .equals() method is not overridden for content comparison and hence hashCode() method is also not overridden 
+
+StringBuffer sb1 = new StringBuffer("Durga");
+StringBuffer sb2 = new StringBuffer("Durga");
+sopln(sb1.equals(sb2));				//false
+sopln("Hashcode of sb1 : " + sb1.hashCode());	//false
+sopln("Hashcode of sb2 : " + sb2.hashCode());	//false
+
+consider the following person class 
+
+class Person{
+	public boolean equals(Object obj){
+		if(obj instanceof person){
+			person p = (Person)obj;
+			
+			if(name.equals(p.name) && age == s.age){
+				return true
+			}	
+			return false;
+		}
+	}	
+}
+
+which of the following hashCode() methods are appropriate for person class.
+
+public int hashCode(){			//invalid
+	return 100;
+}
+
+public int hashCode(){			//invalid
+	return age + ss;
+}
+
+public int hashCode(){			//valid
+	return name.hashcode() + age;
+}
+
+no restruction				//invalid
+
+Note : based on which parameters we override .equals() method, it is highly recommended to use same parameters while overriding hashCode() method also based on the same parameter.
+
+Note : in all collection classes, in all wrapper classes and in String class  equals() method is overridden for content comparison.
+_______
+Hence it is highly recommended to override equals() method in our class also for content comparison.
+
+__________________
+object.clone()
+__________________
+
+The process of creating exactly duplicate object is called cloning the main purpose of cloning is to maintain backup copy and to preserve state of an object.
+
+we can perform cloning by using clone() method of object class.
+
+prototype of clone is :
+___________________________
+protected native Object clone() throws CloneNotSupportedException{
+
+}
+
+class Test implements Clonable{--------3	RE
+	int i = 10;
+	int j = 20;
+	
+	public static void main(String[] args) throws CloneNotSupportedException{----->2	CE
+		Test t1 = new Test();
+		Test t2 = (Test)t1.clone();------>1	CE
+		t2.i = 888;
+		t2.j = 999;
+		sopln(t1.i + "..." + t2.i);	//10...20
+	}
+}
+
+we can perform cloning only for clonable objects 
+
+an object is said to be clonable if and only if the corresponding class implements Colnable interface 
+
+clonable interface present in java.lang; package and it doesn't contain any methods it is a marker interface.
+
+if we are trying to perform cloning for non-clonable objects then we will get run time exception saying CloneNotSupportedException.
+
+_____________________________________
+shallow cloning vs Deep cloning
+_____________________________________
+
+shallow cloning						Deep cloning
+
+
+
+
+		j = 20					j = 20		j = 20
+		/    \			
+	      /	       \			d1					d2		
+	    /		 \				i = 10		i = 10
+	  /    		   \
+	/		     \
+d2--->i = 10;		d2--->i = 10	
+
+	Don d2 = (Dog)d1.clone();			Don d2 = (Dog)d1.clone();
+	
+
+Shallow cloning
+__________________
+
+the process of creating bitwise copy of an object is called shallow cloning. If the main object contains primitive variables then exactly duplicate copies will be created in the cloned object.
+
+if the main object contain any reference variable then corresponding object won't be created just duplicate reference variable will be created pointing to old content object 
+
+Object class clone method ment for shallow cloning.
+
+e.g 
+
+class Cat{
+	int j;
+	Cat(int j){
+		this.j = j;
+	}
+	
+}
+
+class Dog implements Clonable{
+	Cat c;
+	int i;
+	
+	Dog(Cat c, int i){
+		this.c = c;
+		this.i = i;
+	}
+	
+	public Object clone()throws CloneNotSupportedException{
+		return super.clone();
+	}
+}
+
+class ShallowCloning{
+	public static void main(String[] args) throws CloneNotSupportedException{
+		Cat c = new Cat(10);
+		
+		int i = 10;
+		Dog d1 = new Dog(c,i);
+		sopln(d1.i + "........." + d1.c.j);	//10.....20
+		
+		Dob d2 = (Dog) d1.clone();
+		d2.i = 888;
+		d2.j = 999;
+		
+		sopln(d1.i + "........." + d1.c.j);	//10.....999
+	}
+}
+
+output : 
+__________
+10.......20
+10.......999
+
+in shallow cloning by using cloned object reference if we perform any change to the contained object then those changes will be reflected to the main object. To overcome this problem we should go for deep cloning.
+
+_____________________
+Deep cloning
+_____________________
+
+The process of creating exactly independent copy including contained object is called deep cloning.
+
+In deep cloning if the main object contain any primitive variable then in the cloned object duplicate copies will be created.
+
+if the main object contains any reference variable then the corresponding contained objects also will be created in the cloned copy.
+
+by default object class clone() method ment for shallow cloning but we can implement deep cloning explicitly by overriding clone() method in our class.
+
+e.g 
+
+class Cat{
+	int j;
+	Cat(int j){
+		this.j = j;
+	}
+	
+}
+
+class Dog implements Clonable{
+	Cat c;
+	int i;
+	
+	Dog(Cat c, int i){
+		this.c = c;
+		this.i = i;
+	}
+	
+	public Object clone()throws CloneNotSupportedException{
+		
+		Cat c1 = new Cat(c.j);
+		Dog d2 = new Dog(c1, i);
+		
+		return d2;
+	}
+}
+
+class ShallowCloning{
+	public static void main(String[] args) throws CloneNotSupportedException{
+		Cat c = new Cat(10);
+		
+		int i = 10;
+		Dog d1 = new Dog(c,i);
+		sopln(d1.i + "........." + d1.c.j);	//10.....20
+		
+		Dob d2 = (Dog) d1.clone();
+		d2.i = 888;
+		d2.j = 999;
+		
+		sopln(d1.i + "........." + d1.c.j);	//10.....20
+	}
+}
+
+output : 
+
+10........20
+10........20				c.j = 10			c.j = 10
+
+					i = 20				  i = 20
+					/\				   /\					
+					d1				   d2
+					
+by using cloned object reference if we perform any change to the contained object then those changes won't be reflected to the main object. 							
+
+which cloning is best.
+_______________________
+
+if an object contains only primitive variables then shallow cloning is the best choice.
+
+if object contains reference variables then deep cloning is best choice.
+
+

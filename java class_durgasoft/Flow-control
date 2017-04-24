@@ -1,0 +1,1090 @@
+Flow-Cotrol
+______________
+
+
+flow control describes the order in which the statements will be executed at run-time.
+
+flow Control:
+	1. selection statement : among several options only one options will be selected and will be executed.
+		e.g if-else, switch-statement
+	2. iterative statements : a group of statement will be executed iteratively. 
+		e.g while loop, do-while loop, for loop, for-each loop
+	3. transfer statements : control will be transfer to.
+		e.g break statement, continue statement, return statement, try- catch- finally, assert
+
+
+selection-statements
+_________________________
+
+if-else : 
+
+if(b){	//(b should be boolean type)
+	action : if b is true
+}else {
+	action : if b is false 
+}
+
+the argument to the if statement should be boolean type by-mistake if we are tryingn to provide any other type then we will get compile-time error. 
+
+e.g 1.  int x = 10;
+	if(x){
+		sopln("hello");
+	}else{
+		sopln("hi");
+	}
+
+	output:
+	CE: incompatable type found:int required : boolean
+e.g 2.  int x = 10;
+	if(x=20){
+		sopln("hello");
+	}else{
+		sopln("hi");
+	}
+
+	output:
+	CE: incompatable type found:int required : boolean
+
+e.g 3.  int x = 10;
+	if(x == 10){
+		sopln("hello");
+	}else{
+		sopln("hi");
+	}
+
+	output:
+	hello
+
+e.g 4.  boolean b = false;
+	if(b = false){
+		sopln("hello");
+	}else{
+		sopln("hi");
+	}
+
+	output:
+	hi
+
+e.g 5.  boolean b = false;
+	if(b == false){
+		sopln("hello");
+	}else{
+		sopln("hi");
+	}
+
+	output:
+	hello
+conclusion 2 : else part and curlibreces are optional. Without curlibreces only one statement is allowed under if which should not be declarative statement.
+
+e.g 1 . if(true)
+		sopln("hello);
+
+	output : hello
+
+e.g 2 . if(true);
+		
+	output : 
+e.g 3 . if(true)
+		int x = 10;
+
+	output : CE : 
+
+e.g 4 . if(true){
+		int x = 10;
+		sopln("hello);
+	}
+	output : hello
+
+NOte : semicolon(';') is a valid java statement which is also known as empty statement.
+
+therer is no dangling else problem in java every else is mapped to the nearest if statement. 
+
+switch-statement
+__________________
+if several options are available then it is not recommanded to use nested if-else
+
+because it reduces redability of the code. To handle this requirement we should go for switch statement.
+
+syntax of  switch : 
+
+switch(x){
+	case 1 : 
+		action 1;
+		break;
+	case 2 : 
+		action 2;
+		break;
+
+	case 3 : 
+		action 3;
+		break;
+
+	case default : 
+		action default;
+		break;
+
+}
+
+the allowed argument types for the switch statement are byte, short, char, int until 1.4 version but from 1.5 version onwards corresponding wrapper classes and enum types also allowed.
+
+from 1.7 version onwards String type also allowed. 
+
+1.4		1.5		1.7
+_______________________________________________
+byte		byte		
+short		short
+int		int		1.5 + String
+char		char
+		enum
+_______________________________________________
+
+curlibraces are manidatory in except switch every where curlibraceses are optional.
+
+both case and default optional i.e an empty switch satement is a valid java syntax.
+
+int x = 10
+swithc(x){
+
+}
+
+inside every statement should be under some case or default. i.e. independent statements are not allowed inside switch otherwise we will get compile time error.
+
+class Test{
+
+	public static void main(String[] args){
+		int x = 10;
+		switch(x){
+			sopln("Hello");
+		}
+	}
+
+CE: case default or curlibrace({) expected
+
+every case label should be compile time constant(i.e constant expression).
+
+e.g int x = 10;
+
+int y = 20;
+
+switch(x){
+case 10 : 
+	sopln(10);
+	break;
+case y : sopln(20);
+	break;		//CE : constatn expressin required
+}
+
+if we declare y as final then won't get any compile time error.
+
+both switch argument and case lable can be expressions but case lable should be constant expression.
+
+e.g int x = 10;
+
+switch(x+5){
+	case 1 : 
+		sopln("case 1");
+		break;
+	case 1+2+3:
+		sopln("case 1+2+3");
+		break;
+}
+
+every case label should be in the reagne of switch argument type otherwise we will get compile time error.
+
+byte b = 20;
+		
+		switch(b){
+		case 10 :
+			System.out.print(b);
+			break;
+		case 100:
+			System.out.println(b + 1);
+			break;
+			
+		case 1000:
+			System.out.println(b+100);
+			break;
+		}
+invalid
+CE : 
+	possible loss of precision required : byte found : int
+
+byte b = 20;
+		
+		switch(b + 1){
+		case 10 :
+			System.out.print(b);
+			break;
+		case 100:
+			System.out.println(b + 1);
+			break;
+			
+		case 1000:
+			System.out.println(b+100);
+			break;
+		}
+
+valid 
+
+Duplicase labels are not allowed otherwise we will get compile time error.
+
+int x = 20;
+		
+		switch(x){
+		case 97 :
+			System.out.print(97);
+			break;
+		case 98:
+			System.out.println(98);
+			break;
+			
+		case 99:
+			System.out.println(99);
+			break;
+		case 'a':
+			System.out.pritln("a");
+		}
+
+invalid:
+
+CE : Duplicate case lable.
+
+case label  : it should be constant expression.
+
+	      the value should be in the reange of switch argument type.
+
+	      duplicate case labels are not allowed.
+
+
+fall throw inside switch : 
+___________________________
+
+within the switch if any case is matched from that case on-wards all statements will be executed until break or end-of-switch this is called fall-throw-inside switch.
+
+the main advantage of fall-throw inside switch is we can define common action for multiple cases (code-reusability) 
+
+int x = 10;
+switch(x){
+	case 1 :
+	case 2 :
+	case 3 :
+	case 4 : 
+		sopln("q-4");
+		break;
+	case 5 :
+	case 6 :
+	case 7 :
+	case 8 : 
+		sopln("q-1");
+		break;
+
+}
+
+switch(x){
+	case 0 : sopln(0);		//if x = 0 : 0 1
+	case 1 : sopln(1); break;	//if x = 1 : 1
+	case 2 : sopln(2);		//if x = 2 : 2 def
+	default : sopln(def);		//if x = 3 : def
+
+}
+
+
+default case : 
+
+within the switch we can take default case at most once.
+
+default case will be executed if and only if there is no-case matched.
+
+within the switch we can write default case any where but it is recommanded to write as last case.
+
+switch(x){
+	default : sopln(def);		//if x = 3 : def 0
+	case 0 : sopln(0);  break;	//if x = 0 : 0
+	case 1 : sopln(1); 		//if x = 1 : 1 2
+	case 2 : sopln(2);		//if x = 2 : 2 
+
+}
+
+Iterative statements
+_______________________
+
+1. While : if we don't know number of iterations in advance then we should go for while loop.
+
+e.g while(rs.next()){
+
+}
+
+while(e.hasMoreElements()){
+	.
+	.	
+	.
+	.
+}
+
+while(it.hasNext()){
+	.
+	.	
+	.
+	.
+}
+
+Syntax : 
+
+while(b){		//(b should be boolean type)
+	action
+}
+
+the argument should be boolean type. If we are trying to provide any other type then we will get compile time error.
+
+while(1){
+	sopln("Hello");	//CE : Incompatable types Found : int Required : boolean.
+}
+
+Note : curlibraceses are optional and without curlibraces we can take only one statement under while which should not be declarative statement.
+
+e.g 1 . while(true)
+		sopln("hello);
+
+	output : hello
+
+e.g 2 . while(true);
+		
+	output : 
+e.g 3 . while(true)
+		int x = 10;
+
+	output : CE : 
+
+e.g 4 . while(true){
+		int x = 10;
+		sopln("hello);
+	}
+	output : hello
+
+
+e.g 1.	
+	while(true){
+		System.out.println("Hello");
+	}
+	System.out.println("hi");
+
+	output : CE : unreachable code
+
+e.g 2.	
+	while(false){
+		System.out.println("Hello");
+	}
+	System.out.println("hi");
+
+	output : CE : unreachable code
+
+e.g 3.	int a = 10;
+	int b = 20;
+	while(a < b){
+		System.out.println("Hello");
+	}
+	System.out.println("hi");
+
+	output : hi
+
+e.g 4.	final int a = 10;
+	final int b = 20;
+	while(a < b){
+		System.out.println("Hello");
+	}
+	System.out.println("hi");
+
+	output : hello....(infinite time)
+
+e.g 5.	final int a = 10;
+	final int b = 20;
+	while(a < b){
+		System.out.println("Hello");
+	}
+	System.out.println("hi");
+
+	output : CE : unreachable code
+
+e.g 6.	final int a = 10;
+	final int b = 20;
+	while(a > b){
+		System.out.println("Hello");
+	}
+	System.out.println("hi");
+
+	output :  CE : unreachable code
+
+
+Note : 1. every final variable will be replaced by the value at compile time only. 
+
+final int a = 10;
+
+int b = 20;
+
+sopln(a);
+sopln(b);
+
+after compilation 
+sopln(10);
+sopln(b);
+
+Note : 2. if every argument is a final variable (compile time constant). Then that operation should be performed at compile time only.
+
+final int a = 10;
+
+final int b = 20;
+
+int c = 20;
+
+sopln(a+b);
+sopln(a+c);
+sopln(a<b);
+sopln(a<c);
+
+after compilation
+
+sopln(30);
+sopln(10+c);
+sopln(true);
+sopln(10<c);
+
+do-while loop
+_______________
+
+if we want to execute loop body atlist once then we should go for do-while 
+
+syntax : 
+
+do{
+	body
+} while(b);	//b should be boolean type and semicolon (';') is manidatory.
+
+within do-while curlibraces are optional and without curlibraces we can take only one statement between do and while which should not be declaraive statement.
+
+do
+	sopln("test");
+while(true);		//valid 
+
+do;
+while(true);	//valid 
+
+do
+	int x = 10;
+while(true);	//invalid 
+
+
+do {
+	int x = 10;
+}while(true);	//valid 
+
+do
+while(true);	//valid 
+
+do while(true)
+sopln("Hello");
+while(false);
+
+same above code is completely valid and output will print
+do
+	while(true)
+		sopln("hello");
+while(false);
+
+
+
+e.g 1: 
+do{
+	sopln("Hello");
+}while(true);
+sopln("hi");
+			output : CE : unreachable statement
+e.g 2:
+do{
+	sopln("Hello");
+}while(false);
+sopln("Hi");
+			output: Hello
+				Hi
+e.g 3:
+int a = 10;
+int b = 20;
+do{
+	sopln("Hello");
+}while(a<b);
+sopln("hi");
+			output : Hello......(infinite number of times)
+e.g 4:
+int a = 10;
+int b = 20;
+
+do{
+	sopln("hello");
+}while(a > b);
+
+sopln("hi");
+			output : Hello
+				 Hi
+e.g 5:
+
+final int a = 10;
+final int b = 20;
+
+do{
+	sopln("hello");
+}while(a<b);
+sopln("hi");
+			output : CE : unreachable statement
+e.g 6:
+
+final int a = 10;
+final int b = 20;
+
+do{
+	sopln("hello");
+}while(a>b);
+sopln("hi");
+
+			output : hello
+				 hi
+
+__________
+For loop
+__________
+
+1. for loop is most commonly used loop in java.
+2. if we know number of iterations in advance then for loop is the best choice
+
+syntax : 
+
+for(initialization section-->1 ; conditional check-->2,5,8... ; increment or decrement section-->4,7,10... ){
+	loop body-->3,6,9...
+}
+
+(numbers indicate step numbers of execution)
+
+curlibraces are optional and without curlibraces we can take only one statement under for loop, which should not be declarative statement.
+
+e.g 1.
+for(int i = 0 ; true; i++)
+	sopln("Hello");
+	//valid
+
+e.g 2. 
+for(int i = 0 ; i < 10 ; i++);
+	//valid
+e.g 3.
+for(int i = 0; i < 10; i++)
+	int x = 10; 		//invalid
+
+
+initialization section
+----------------------------
+
+1. this part will be executed only once in loop lifecycle.
+2. here we can declare and initialize local variables of for loop.
+3. here we can declare any number of variables but should be of the same type by mistake if we are trying to declare different data type variables then we will get compile time-error.
+
+e.g
+
+int i = 0, j = 0; // valid
+int i = 0, String s = "Durga";	//invalid
+int i = 0, int j = 0;	//invalid
+
+
+in the initialization section we can take any valid java statement including 
+sopln().
+
+e.g.
+public class Test {
+	public static void main(String[] args){
+		int i = 0;
+		for(System.out.println("hello you are sleeping "); i < 10 ; i++){
+			System.out.println("no you only sleeping ");
+		}
+		
+	}
+}
+
+Conditional check
+__________________
+1. Here we can take any valid java expression but should be of the type boolean.
+2. this part is optional and if are not taking any thing then compiler will always place true.
+
+e.g 
+public class Test {
+	public static void main(String[] args){
+		int i = 0;
+		for(System.out.println("hello you are sleeping "); true ; i++){
+			System.out.println("no you only sleeping ");
+		}
+		
+	}
+}
+
+increment or decrement section.
+________________________________
+in the increment or decrement section we can take any valid java statement including sopln().
+ 
+public class Test {
+	public static void main(String[] args){
+		int i = 0;
+		for(System.out.println("hello you are sleeping "); i<5 ; System.out.println("hello")){
+			System.out.println("no you only sleeping ");
+			i++;
+		}
+		
+	}
+}
+
+output : 
+
+hello you are sleeping 
+no you only sleeping 
+hello
+no you only sleeping 
+hello
+no you only sleeping 
+hello
+no you only sleeping 
+hello
+no you only sleeping 
+hello
+
+All three parts of for-loop are independent of each other and optional.
+
+e.g 1.
+public class Test {
+	public static void main(String[] args){
+		int i = 0;
+		for(;  ; ){
+			System.out.println("Hello");
+		}
+		
+	}
+}
+output:
+
+Hello
+Hello
+Hello
+Hello
+(infinite time)
+e.g 2.
+public class Test {
+	public static void main(String[] args){
+		int i = 0;
+		for(;  ; );
+		
+	}
+}
+
+Different cases related to for-loop
+
+e.g 1.
+public class Test {
+	public static void main(String[] args){
+		for(int i = 0; true; i++){
+			System.out.println("Hello");
+		}
+		System.out.println("Hiii");----------->CE : unreachable statement
+	}
+}
+
+e.g 2.
+public class Test {
+	public static void main(String[] args){
+		for(int i = 0; false; i++){----------->CE : unreachable statement
+			System.out.println("Hello");
+		}
+		System.out.println("Hiii");
+	}
+}
+
+
+e.g 3.
+public class Test {
+	public static void main(String[] args){
+		for(int i = 0; ; i++){
+			System.out.println("Hello");
+		}
+		System.out.println("Hiii");----------->CE : unreachable statement
+	}
+}
+
+
+e.g 4.
+public class Test {
+	public static void main(String[] args){
+		int a = 10;
+		int b = 20;
+		for(int i = 0; a<b; i++){
+			System.out.println("Hello");
+		}
+		System.out.println("Hiii");
+	}
+}
+
+output:
+
+Hello
+Hello
+Hello
+Hello
+.
+.
+.
+e.g 5.
+public class Test {
+	public static void main(String[] args){
+		int a = 10;
+		int b = 20;
+
+		for(int i = 0; a>b; i++){
+			System.out.println("Hello");
+		}
+		System.out.println("Hiii");
+	}
+}
+
+output:
+Hi
+
+e.g 6.
+public class Test {
+	public static void main(String[] args){
+		final int a = 10;
+		final int b = 20;
+
+		for(int i = 0; a>b; i++){----------->CE : unreachable statement
+			System.out.println("Hello");
+		}
+		System.out.println("Hiii");
+	}
+}
+
+e.g 7.
+public class Test {
+	public static void main(String[] args){
+		final int a = 10;
+		final int b = 20;
+
+		for(int i = 0; a<b; i++){
+			System.out.println("Hello");
+		}
+		System.out.println("Hiii");----------->CE : unreachable statement
+	}
+}
+
+__________________________________
+for-each loop (enhanced for loop)
+__________________________________
+
+introduced in 1.5 version
+
+it is specially designed loop to retrive elements of arrays and collections.
+
+e.g 1. to print elements of one dimentional array.
+
+Normal for loop
+_______________
+int[] x = {10,20,30,40};
+for(int i = 0; i<5 ; x.length){
+	System.out.println("i :  " + i);
+}
+
+Enhancec for loop
+_________________
+int[] x = {10,20,30,40};
+
+for(int x1 : x){
+	sopln(x1);
+}
+
+e.g 2.
+To print elements of two dimentional array.
+
+Normal for loop
+_______________
+int[][] x = {{10,20,30,40},{50,60,70,80}};
+for(int i = 0; i<x.length ; x.length){
+	for(int j = 0; j<5 ; x[i].length){
+		System.out.println(x[i][j]);
+	}
+}
+
+Enhancec for loop
+_________________
+int[][] x = {{10,20,30,40},{50,60,70,80}};
+
+for(int[] x1 : x){
+	for(int x2 : x1){
+
+		sopln(x2);
+	}
+}
+
+for three dimentional array
+___________________________
+
+int[] x = {{{10,20,30,40},{50,60,70,80}},{{10,20,30,40},{50,60,70,80}}};
+
+for(int[][] x1 : x){
+	for(int[] x2 : x1){
+		for(int[] x3 : x4){
+
+			sopln(x4);
+		}
+	}
+}
+
+
+for each loop is the best choice to retrive elements of arrays and collections but its limitations is it is applicable only for arrays and collections and its not a general purpose loop.
+
+e.g for(int i = 0 ; i< 10; i++){
+	sopln("Hello");
+}
+
+1. we can't write an equivalent for-each loop directly
+2. by using normal for loop we can print array elements either in original order or in reverse order. 
+   But by using for-each loop we can print array elements only in original order but not in reverse order.
+
+int[] x = {10,20,30,40};
+
+for(int i = x.length-1 ; i >= 0; i--){
+	sopln(i);
+}
+
+output : 
+
+50
+40
+30
+20
+10
+
+but we can't write an equivalent for each loop directly.
+
+______________________
+Iterable interface
+______________________
+
+Iterable interface
+		    |----------Arrat | Collection
+for(eachitem x : target){
+		    |----------iterable object
+}
+
+The target element in for-each loop should be iterable object.
+
+an object is said to-be iterable if and only if corresponding class implements java.lang.iterable interface.
+
+Iterable introduced in 1.5 version and it contains only one method iterator();
+
+public Iterator iterator();
+
+All array related classes and collection implemented classes allready implement iterable interface being a programmer we are not required to do anyting just we should aware the point.
+
+Differences between Iterator and Iterable.
+______________________________________________________________________________________________
+
+Iterator				Iterable
+______________________________________________________________________________________________
+
+1. It is related to collection		1. It is related to for-each loop
+
+2. we can use to retrive the elements	2. The target element in for-each loop should
+   of collection one by one.		   be Iterable.
+
+3. It is present in java.util package	3. It is present in java.lang package
+
+4. contain only three methods		4. contains 1 method.
+   1. hasNext()					iterator()
+   2. next()
+   3. remove()
+
+_________________________________________________________________________________________________
+
+_________________________
+Transfer statements.
+_________________________
+
+we can use break statement in the following places
+
+1. inside switch to stop fall throw 
+
+int x = 0;
+switch(x){
+	case 0:
+		sop(0);
+	case 1:
+		sop(1);
+		break;
+	case default : 
+		sopln("def");	
+}
+2. inside loops
+
+to break loops execution based on some condition.
+
+for(int i = 0; i < 10; i++){
+	if(i==5)
+		break;
+	sopln(i);
+}
+
+output:
+
+0
+1
+2
+3
+4
+
+3. inside labled blocks : to break block execution based on some condition.
+
+class Test{
+	public static void main(String[] args){
+		int x = 10;
+		
+		l1:{
+			sopln("begin");
+			if(x == 10)
+				break l1;	
+			sopln("end");
+		}
+		sopln("hello");
+	}
+}
+
+output
+begin
+hello
+
+these are the only places where we can use break statement.
+
+if we are using any where else we will get compile time error saying break outside switch or loop.
+class Test{
+	public static void main(String[] args){
+		int x = 10;
+		if(x==10)
+			break;
+		sopln("hello");
+	}
+}
+CE: break outside switch or loop
+
+________________
+Continue
+________________
+
+Continue statement.
+
+we can use continue statement inside loops to skeep current iteration and continue for next iteration 
+
+e.g for(int i = 0; i< 10; i++){
+		if(i % 2 == 0)
+			continue;
+		else
+			sopln(i);
+	}	
+
+we can use continue statement only inside loops if we are using anywhere else we will get compile-time error saying
+
+continue outside of loop;
+
+class Test{
+	public static void main(String[] args){
+		int x = 10;
+		if(x==10)
+			continue;
+		System.out.println("hello");
+	}
+}
+
+CE : continue outside of loop.
+
+______________________________
+labeled break and continue : 
+______________________________
+
+we can use labeled break and continue to break or continue a particular loop in nested loops
+
+e.g
+l1:
+for( ; ; ){
+	.
+	.
+	.
+	l2:
+	for( ; ; ){
+		.
+		.
+		.
+		l3:		
+		for( ; ; ){
+			break l1;
+			break l2;
+			break;
+		}
+	}
+}
+
+
+l1:
+for(int i = 0; i < 3 ; i++){
+	for(int i = 0; i < 3 ; i++){
+		if(i == j)
+			break;
+		sopln(i + "..." + j);
+	}
+}
+
+break :
+
+1...0
+2...0
+2...1
+
+break l1 : 
+
+no output
+
+continue : 
+
+0...1
+0...2
+1...0
+1...2
+2...0
+2...1
+
+continue l1:
+
+1...0
+2...0
+2...1
+
+____________________________________________
+do-while vs continue (dengrous combination)
+____________________________________________
+
+
+int x = 0;
+
+do{
+	x++;
+	sopln(x);
+	if(++x < 5)
+		continue;
+	x++;
+	sopln(x);
+	
+}while(++x < 10);
+
+output
+1
+4
+6
+8
+10
+in above program

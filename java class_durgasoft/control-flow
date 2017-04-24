@@ -1,0 +1,516 @@
+______________________
+Static control flow
+______________________
+
+Whenever we are executing a java class the following sequence of activities or steps will be executed as the part of static control flow.
+
+1. Identification of static members from top to bottom.					step 1-6
+2. execution of static variable assignments and static blocks from top to bottom.	step 7-12
+3. execution of main method.								step 13-15
+
+e.g
+
+class Base{
+	1-->static int i = 10;-->7
+
+	2-->static{
+		m1(); -->8,-->13
+		System.out.println("First static block");-->10, -->15
+	}
+
+	3-->public static void main(String[] args){
+		m1();
+		System.out.println("Main method");
+	}
+
+	4-->public static void m1(){
+		System.out.println(j);-->9,-->14
+	}
+
+	5-->static{
+		sopln("Second static block");-->11
+	}
+
+	6-->static int j = 20;-->12
+}
+
+RIWO : READ INDIRECTLY WRITE ONLY								
+									i = 0[RIWO]; 
+									j = 0[RIWO];
+									i = 10[RIWO];
+									j = 20[RIWO];
+output:
+
+0
+First Static block
+Second static block
+20 
+main method
+
+1. Identification of static members from top to bottom.
+2. Execution of static variable assignment and static block from top to bottom.
+3. Execution of main method.
+
+
+RIWO : READ INDIRECTLY WRITE ONLY
+
+inside static block if we are trying to read a variable that read operation is called direct read.
+if we are calling a method and within that method if we are trying to read a variable that read operation is called indirect read.
+
+class Test{
+	static int i = 10;
+
+	static{
+		sopln(i);------->direct read
+	}
+	public static void m1(){
+		sopln(i);------------->Indirect read
+	}
+}
+
+if a variable is just identified by the jvm and original value not yet assigned then the variable is said to be Read Indirectly Write Only State[RIWO].
+
+If a variable is in read indirectly write-only state then we can't perform direct read but we can perform indirect read.
+
+If we are trying to read directly then we will get compile time error saying IllegalForwardReference.  
+
+e.g 1.
+
+class Test{
+	static int x = 10;
+
+	static{
+		sopln(x);
+	}
+}
+
+output:
+10
+
+class Test{
+	static{
+		sopln(x);
+	}
+	static int x = 10;
+}
+
+x = 0;[RIWO]
+CE : illegal forward reference
+	
+class Test{
+	static{
+		m1();
+	}
+	public static void m1(){
+		sopln(x);
+	}
+	static int x = 10;
+}
+
+output:
+
+RE : NoSuchMethodFoundError: main()
+
+_____________________
+static block
+_____________________
+
+Static block will be executed at the time of class loading hence at the time of class loading if we want to perform any activity we have to define that inside static block.
+
+e.g 1. at the time of java class loading the corresponding native libraries should be loaded hence we have to define this activity inside static block 
+
+class Test{
+	static{
+		System.loadLibrary("native library path");
+	}
+}
+
+
+e.g 2 After loading every database driver class we have to register driver class with driverManager. But inside database driver class there is a static block to perform this activity and we are not responsible to register explicitly 
+
+class DBDriver{
+	static{
+		Register this driver with driver manager.
+	}
+}
+
+Note : within a class we can declare any number of static blocks but all these static blocks will be executed from top to bottom.
+
+
+Q1. Without writing main() method is it possible to print some statements to the console.
+
+Ans : yes by using static block.(till 1.6 only. In 1.7 version we have compulsory to define main())
+
+e.g class Test{
+	static{
+		System.out.println("I can print");
+		System.exit(0);
+	}
+}
+
+output:
+
+I can print
+
+Q2. Without writing main() method and static block is it possible to print some statement to the console.
+
+Ans : YES off-course there are multiple ways.
+
+
+1.
+class Test{
+	static int x = m1();
+
+	public static int m1(){
+		System.out.ptrintln("Hello I can print");
+
+		return 10;
+	}
+}
+
+2. 
+class Test{
+	static Test t = new Test();
+
+	{
+		System.out.ptrintln("Hi I can print");
+		System.exit(0);
+	}
+}
+
+
+3. 
+
+class Test{
+	static Test t = new Test();
+	
+	Test(){
+		System.out.ptrintln("Hello hi I can print");
+		System.exit(0);
+	}
+}
+
+From 1.7 version onwards main() method is mandatory to start a program execution. Hence from 1.7 version onwards without writing main method it is impossible to print some statements to the console.
+
+______________________________________________________
+Static control flow in parent to child relation-ship
+______________________________________________________
+
+Whenever we are executing child class the following sequence of events will be executed automatically as part of static control flow. 
+
+1. Identification of static members from parent to child.				step 1-11
+2. Execution of static variable assignments and static blocks from parent to child.	step 12-22
+3. Execution of only child class main method.						step 23-25
+
+
+class Base{
+	1-->static int i = 10;-->12
+
+	2-->static{
+		m1(); -->13
+		System.out.println("First static block"); -->15
+	}
+
+	3-->public static void main(String[] args){
+		m1();
+		System.out.println("Main method");
+	}
+
+	4-->public static void m1(){
+		System.out.println(j);-->14
+	}
+
+	5-->static int j = 20;-->16
+}
+
+class Derived extends Base{
+	6-->static int x = 30;-->17
+
+	7-->static{
+		m2(); -->18
+		System.out.println("Derived first static block");-->20
+	}
+
+	8-->public static void main(String[] args){
+		m2();-->23
+		System.out.println("Derived Main method");-->25
+	}
+
+	9-->public static void m2(){
+		System.out.println(y);-->19,-->24
+	}
+
+	10-->static{
+		System.out.println("Derived Second static block");-->21
+	}
+
+	11-->static int y = 200;-->22
+}
+java Derived
+output
+
+0
+base static block
+0
+derived first static block 
+derived second static block
+
+200
+derived main
+
+java Base
+
+0
+base static block
+20
+base main
+
+Note:
+
+whenever we are loading child class automatically parent class will be loaded. But whenever we are loading parent class child class won't be loaded (because parent class members by default available to the child class where as child class members by default won't available to the parent).
+
+______________________
+Instance control flow
+______________________
+
+Whenever we are executing a java class first static control flow will be executed. In the static control flow if we are creating an object the following sequence of events will be executed as part of instance control flow
+
+1. identification of instance members from top to bottom.				Step 2 to 8
+2. execution of instance variable assignments and instance blocks from top to bottom.	Step 9 to 14
+3. execution of constructor.								Step 15
+
+class Test{
+     3-->int n = 20;-->9
+     4-->{
+		m1();-->10
+		System.out.println("First instance block");-->12
+	}
+     5-->Test(){
+		System.out.println("constructor");-->15
+	}
+
+    1-->public static void main(String[] args){
+    2-->	Test t = new Test();			//line 1
+		System.out.println("Main");
+	}
+    6-->public void m1(){
+		System.out.println("Inside method "+j);-->11
+	}
+
+    7-->{
+		System.out.println("Second static block");-->13
+	}
+    8-->int j = 30;-->14
+}
+
+output:
+
+Inside method 0
+First instance block
+second instance block
+constructor
+Main
+
+
+if we comment line 1 then output is
+
+Main
+
+
+Note : static control flow is one time activity which will be performed at the time of class loading.
+But instance control flow is not one time activity and it will be performed for every object creation.
+object creation is most costly operation if there is no specific requirement then it is not recommended to create object.
+
+______________________________________________________
+Instance control flow in parent to child relationship
+______________________________________________________
+
+Whenever we are creating child class object the following sequence of events will be performed automatically as the part of instance control flow.
+
+1. identification of instance members from parent to child.					step 4 to 14
+2. Execution of instance variable assignments and instance blocks only in parent class		step 15 to 19
+3. Execution of parent constructor. 								step 20
+4. Execution of instance variable assignments and instance blocks in child class.		step 21 to 26
+5. Execution of child constructor 								step 27
+
+class Parent{
+     4-->int i = 10;-->15
+     5-->{
+		m1();-->16
+		System.out.println("Parent instance block");-->18
+	}
+     6-->Parent(){
+		System.out.println("Parent constructor");-->20
+	}
+
+    1-->public static void main(String[] args){
+	    	Parent P = new Parent();		//line 
+		System.out.println("Parent Main");
+	}
+    7-->public void m1(){
+		System.out.println("Inside method "+j);-->17
+	}
+
+    8-->int j = 20;-->19
+}
+
+class Child extends Parent{
+   9-->int x = 100;-->21
+   10-->{
+		m2();-->22
+		System.out.println("child first instance block");-->24
+	}
+   11-->Child(){
+		System.out.println("child constructor");-->27
+	}
+   2-->public static void main(String[] args){
+   3-->		Child c = new Child();
+		System.out.println("child main");-->28
+	}
+
+   12-->public void m2(){
+		System.out.println(y);-->23
+	}
+	
+   13-->{
+		System.out.println("child second instance block");-->25
+	}
+   14-->int y = 200;-->26
+} 
+
+output:
+
+0
+Parent instance block
+parent constructor
+
+0
+child first instance block
+child second instance block
+child constructor
+child main method
+
+_________________________________
+instance and static control flow
+_________________________________
+
+class Test{
+	{
+		System.out.println("first instance block");
+	}
+	static{
+		System.out.println("first static block");
+	}
+	Test(){
+		
+		System.out.println("Constructor");
+	}
+
+	public static void main(String[] args){
+		Test t1 = new Test();
+		
+		System.out.println("main");
+		Test t2 = new Test();		
+	}
+	static{
+		System.out.println("second static block");
+	}
+	{
+		System.out.println("second instance block");
+	}
+}
+
+first static block
+second static block
+first instance block
+second instance block
+constructor
+main
+first instance block
+second instance block
+constructor
+
+public class Initialization{
+	private static String m1(String msg){
+		System.out.println(msg);
+		return msg;
+	}
+	public Initialization(){
+		m = m1("1");
+	}
+	{
+		m = m1("2");
+	}
+	String m = m1("3");
+
+	public static void main(String[] arg){
+		Object o = new Initialization();
+	}
+}
+
+output:
+
+2
+3
+1
+public class Inistialization{
+	private static String m1(String msg){
+		System.out.println(msg);
+		return msg;
+	}
+	static String m = m1("1");
+	{
+		m = m1("2");
+	}
+	static{
+		m = m1("3");
+	}
+
+	public static void main(String[] arg){
+		Object o = new Initialization();
+	}
+}
+
+output:
+1
+3
+2
+
+
+Note ***: 
+From static area we can't access instance members directly because while executing static area JVM may not identify instance members.
+
+class Test{
+	int x = 10;
+	public static void main(String[] args){
+		Test t = new Test();
+
+		sopln(t.x);
+	}
+}
+
+************************************************************************************************
+*in how many ways we can crate an object in java or in how many ways we can get object in java.*
+************************************************************************************************
+1. By using new operation 
+Test t = new Test();
+
+2. By using new instance method
+Test t = (Test) Class.forName("Test")newInstance();
+
+3. By using factory methods
+Runtime r = Runtime.getRuntime();
+e.g dateFormat df = DateFormat.getInstance();
+
+4. By using clone() method.
+
+Test t1 = new Test();
+Test t2 = (Test)t1.clone();
+
+5. By using deserilalization
+
+FileInputStream fis = new FileInputStream("abc.sar");
+ObjectInputStream ois = new ObjectInputStream(fis);
+Dog d2 = (Dog)ois.readObject();
+
+

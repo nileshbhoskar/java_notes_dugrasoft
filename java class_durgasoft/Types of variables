@@ -1,0 +1,339 @@
+_____________________
+Types of variables
+_____________________
+
+Based on type of value represented by a variable all variables are devided into two types.
+
+1. premitive variables 
+2. reference variables
+
+1. premitive variables : can be used to represent premitive values
+
+			e.g int x = 10;
+
+2. reference variables : can be used to referrer objects 
+			
+			e.g student s = new Student();
+
+Division 2
+_____________
+
+Based on position of declaration and behaviourall variables are devided into 3 types
+
+1. instance variables
+2. static variables
+3. local variables
+
+_____________________
+Instance variables
+_____________________
+
+1. if the value of a variable is varied from object to object such type of variables are called instance variables.
+2. for every object a seprate copy of instance variables will be created.
+
+3. Instance variables hould be declared within the class directly but outside of ant method or block or constructor.
+instance variable will be created at the time of object creation and destroyed at the time of object distruction hence the scope of instance 
+variable is exactly same as the scope of object.
+
+Instance variables will be stored in the heap memory as a part of object
+we can't access instance variables directly from static area.
+
+But we can access by using object reference.
+
+but we can access instance variables directly from instance area.
+
+e.g 
+
+class Test{
+	int x = 10;
+	public static void mina(String[] args){
+		sopln(x);------------------------------> // invalid CE:Non static variable x cannot be referenced from a static context.
+		Test t1 = new Test();
+		sopln(t1.x);---------------------------> //valid output : 10
+	}
+	
+	public void sum(){
+		sopln(x);	
+	}
+}
+
+for Instance variables JVM will always provide default values and we are not required to perform initialization explicitly.
+
+e.g 
+class Test{
+	int x;
+	double d;
+	boolean b;
+	String s;
+	public static void main(String[] args){
+		Test t1 = new Test();
+		sop(t1.x);------------------------>0
+		sop(t1.d);------------------------>0.0
+		sop(t1.b);------------------------> false
+		sop(t1.s);------------------------> null
+	}
+}
+
+instance variables also known as object level variables or attributes.
+
+____________________
+static variables
+____________________
+
+if the value of a variable is not varied from object to object then it is not recommanded to declare variable as instance variable. we have to declare such type of variables at class level by using static modifier.
+
+In the case of instance variables for every object a seperet copy will be creaed but in the case of static variables a single copy will be creaed at class level and shared by every object of the class.
+
+Static variables should be declared within the class directly but outside of any method or block or constructor. 
+
+Static variables will be created at the time of class loading and destroyed at the time of class unloading hence scope of static variable is exactly same as scope of .class file.
+
+
+Load class by JVM
+
+1. Start JVM
+2. create and start main thread
+3. locate Test.class File
+4. Load Test.class---------------->Start static variable initialization
+5. Execute Main() Thread.
+6. Unload Test class---------------->Start static variable deinitialization
+7. Terminate main thread
+8. shutdown JVM.
+
+Static variables will be stored in method area.
+
+we can access static variables either by object reference or by class name but recommanded to use class name.
+within the same class it is not required to use class name and we can access directly.
+
+class Test{
+	static int x = 10;
+	public static void main(String[] args){
+		Test t = new Test();
+		sop(t.x);-----------------------------> Valid
+		sop(Test.x);-----------------------------> Valid
+		sop(x);-----------------------------> Valid
+	}
+}
+
+we can access static variables directly from both instance and static areas.
+e.g
+
+class Test{
+	static int x = 10;
+	public static void main(String[] args){
+		sopln(x);
+	}
+	public void display(){
+		sopln(x);
+	}
+}
+
+for static variables JVM will provide default values and we are not required to perform initialization explicitly 
+
+class Test{
+	static int x;
+	static double d;
+	static String s;
+	public static void main(String[] args){
+		sopln(x);--------------------------->// valid 0
+		sopln(d);--------------------------->// valid 0.0
+		sopln(s);--------------------------->// valid null
+	}
+}
+
+static variables also known as class level veriables or fields.
+
+class Test{
+	static int x = 10;
+		int y = 20;
+	public static void main(String[] args){
+		Test t1 = new Test();
+		t1.x = 888;
+		t1.y = 999;
+		Test t2 = new Test();
+		sopln(t2.x + "............" + t2.y);----------------------->// output : 888...........20
+	}
+}
+
+________________
+Local Variable  |
+________________|
+
+1. some times to meet temperary requirements of the programmer we can declare variables inside a method or block or constructor such type of variables are called local variables or temporary variables or stack variables or automatic variables 
+
+2. local variables will be stored inside stack memory.
+
+3. local variables will be created while executing block in which we declared it.once block execution complete automatically local variable will be destroyed hence the scope of local variable is the block in which we declared it. 
+
+e.g
+
+class Test{
+	public void static main(String[] args){
+		int i = 3;
+
+		for(int j = 0 ; j < 5; j++){
+			i = i + 1;
+		}
+		sopln(i + "......" + j );------------------> // invalid : CE: cannot find symbol variable : J  class : Test
+	}
+}
+
+class Test{
+	public void static main(String[] args){
+		int i = 3;
+		try{
+			int j = Integer.parseInt("ten");
+		
+		} catch(NumberFormatException e){
+			sopln(j);------------------> // invalid : CE: cannot find symbol variable : J  class : Test
+		}
+		sopln(j);------------------> // invalid : CE: cannot find symbol variable : J  class : Test
+		
+	}
+}
+
+Note : for local variables jvm won't provide default value compulsary we should perform initialization explicitly before using that variables that is if we are not using then it is not required to perform initialization.
+
+e.g 1.
+class Test{
+	public static void main(String[] args){
+		int x;
+		sop("Hello");
+	}
+}
+
+output : 
+Hello
+e.g 2.
+class Test{
+	public static void main(String[] args){
+		int x;
+		sop(x);------------------------------------> // invalid variable x might not have been initialization.
+	}
+}
+
+class Test{
+	public static void main(String[] args){
+		int x;
+		if(args.length > 0){
+			x = 10;		
+		}
+		sop(x);------------------------------------> // invalid variable x might not have been initialization.
+	}
+}
+
+
+class Test{
+	public static void main(String[] args){
+		int x;
+		if(args.length > 0){
+			x = 10
+		} else{
+			x = 20;
+		}
+		sop(x);
+	}
+}
+
+output : 20
+
+
+Note 1 : it's not recommanded to perform initialization for local variables inside local blocks because there is no gauranty for the execution of these blocks always at runtime.
+
+Note 2 : it's highly recommanded to perform initialization for locla variables at the time of declaration atlist with default values.
+
+Note 3 : the only applicable modifier for local variables is final by mistake if we are trying to apply any other modifier then we will get compile time error.
+
+public int x = 10;______________
+private int x = 10;		|
+protected int x = 10;		| invalid ------>illegalStartOfExpression.
+static int x = 10;		|
+transient int x = 10;		|
+volatile int x = 10;____________|
+
+final int x = 10;------> //valid
+
+Note : if we are not declaring with any modifier then by default it is default but this rule is applicable only for instance and static variables but not for local variables.
+______________
+Conclusions   *
+______________*
+
+1. For instance and static variables JVM will provide default balues and we are not required to perform initialization explicitly but for local variables jvm won't provide default values compulsary we should perform initialization explicitly before using that variable.
+2. instance and static variables can be accessed by muliple thread symulteniously and hence these are not thread safe but in the case of local variables for every thread a seprate copy will be created and hence local variables are thread safe.
+
+___________________________________________________________
+Type of variable		is thread safe or not	   |
+___________________________________________________________|
+							   |
+instance variable			not		   |
+							   |
+static variable 			not		   |
+							   |
+local variable				yes		   |
+___________________________________________________________|
+
+1. Every variable in java should be eithrer instance or static or local. 
+2. Every variable in java should be eithr premitive or reference hence variouse possible combinations of variables in java are 
+
+instance - premitive
+static - premitive
+local - premitive
+
+instance - reference
+static - reference
+local - reference
+
+
+class Test{
+	int x = 0;----------------------------> instance premitive
+	static String = "testing";------------> static reference 
+
+	public static void main(String[] args){
+		int[] y = new int[3];--------------------------->local reference
+			
+	}
+}
+
+_______________________
+UnInitialized arrays
+_______________________
+
+class Test{
+	int[] x ;
+	public static void main(String[] args){
+		Test t = new Test();
+		sopln(t.x);	------------------------->null
+		sopln(t.x[0]);	-------------------------> NullPointerVariableException
+	}
+}
+
+I. Instance leven
+1. int[] x;
+	 sopln(objct.x);------------->null
+         sopln(objct.x[0]);---------->NPVE
+
+2. int[] x = new int[3];
+	 sopln(objct.x);-------> [I@45ef68
+         sopln(objct.x[0]);----> 0
+
+II. static level
+
+1. static int[] x;
+	 sopln(objct.x);------------->null
+         sopln(objct.x[0]);---------->NPVE
+
+2. static int[] x = new int[3];
+	 sopln(objct.x);-------> [I@45ef68
+         sopln(objct.x[0]);----> 0
+
+III. local level
+
+1. int[] x;
+	 sopln(objct.x);------------->CE : variable x might not have been initialized.
+         sopln(objct.x[0]);---------->CE : variable x might not have been initialized.
+
+2. int[] x = new int[3];
+	 sopln(objct.x);-------> [I@45ef68
+         sopln(objct.x[0]);----> 0
+
+Note : once we creates an array every array element by default initialized with default values. Errespective of whether it is instance or static or local array.
